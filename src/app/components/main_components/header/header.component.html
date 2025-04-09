@@ -1,6 +1,5 @@
 <header class="header" [class.expanded]="isExpanded" [style.height.px]="headerHeight">
   <nav class="nav-container">
-    <!-- Sección izquierda - PRODUCTS y BEST SELLERS -->
     <div class="nav-section left-section">
       <div class="main-nav-items">
         <div class="products-container" 
@@ -11,14 +10,7 @@
     <div class="dropdown-content">
       <h3 class="dropdown-title">CATEGORIES</h3>
       <div class="dropdown-items">
-        <a class="dropdown-item">SNEAKERS</a>
-        <a class="dropdown-item">CLOTHING</a>
-        <a class="dropdown-item">ACCESSORIES</a>
-        <a class="dropdown-item">COLLECTIBLES</a>
-        <a class="dropdown-item">SKATEBOARDS</a>
-        <a class="dropdown-item">ELECTRONICS</a>
-        <a class="dropdown-item">FOOTBALL</a>
-        <a class="dropdown-item">MUSIC</a>
+        <a class="dropdown-item" *ngFor="let category of categories">{{category}}</a>
       </div>
     </div>
   </div>
@@ -27,12 +19,10 @@
       </div>
     </div>
 
-    <!-- Logo centrado -->
     <div class="logo-container">
       <img src="logo.png" alt="Logo" class="logo">
     </div>
 
-    <!-- Sección derecha - SEARCH y ACCOUNT -->
     <div class="nav-section right-section">
       <div class="nav-right">
         <div class="search-container" 
