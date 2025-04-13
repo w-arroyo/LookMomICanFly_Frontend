@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, Subject, takeUntil } from 'rxjs';
+import { AuthenticationService } from '../../../services/authentication/authentication.service';
 
 @Component({
   selector: 'app-header',
@@ -11,16 +12,20 @@ import { BehaviorSubject, catchError, map, Observable, Subject, takeUntil } from
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
+  httpClient: HttpClient;
+  authenticationService: AuthenticationService;
   showCategories = false;
   searchActive = false;
   isExpanded = false;
+  accountActive= false;
   headerHeight = 60;
-  httpClient: HttpClient;
   destroyStream= new Subject<void>();
   categories: String[]=[];
+  isLogged: boolean=false;
 
-  constructor(httpClient: HttpClient){
+  constructor(httpClient: HttpClient, authenticationService:AuthenticationService){
     this.httpClient=httpClient;
+    this.authenticationService=authenticationService;
   }
 
   ngOnInit(): void{
@@ -30,11 +35,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
     .subscribe({
       next: (categories) => {
         this.categories=categories.categories;
-        categories.categories.map((category)=> console.log(category))
       },
       error: (error) => {console.log(error)}
     });
-    
+    this.authenticationService.isLogged$.pipe(
+      takeUntil(this.destroyStream)
+    )
+    .subscribe({
+      next: (data)=> this.isLogged=data,
+      error: (error) => {
+        console.log(error);
+        this.isLogged=false;
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -45,15 +58,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
   expandCategories() {
     this.showCategories = true;
     this.isExpanded = true;
-    // Altura del header: 60px (base) + altura del dropdown (aproximadamente 250px)
-    this.headerHeight = 310;
+    this.headerHeight = 320;
   }
 
   expandSearch() {
     this.searchActive = true;
     this.isExpanded = true;
-    // Altura del header: 60px (base) + altura del search box (aproximadamente 60px)
     this.headerHeight = 120;
+  }
+
+  expandAccount() {
+    
+      this.accountActive = true;
+      this.isExpanded = true;
+      this.headerHeight = 140;
+    
   }
 
   collapseHeader() {

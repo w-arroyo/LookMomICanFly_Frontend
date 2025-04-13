@@ -174,3 +174,37 @@
   border: none;
   cursor: pointer;
 }
+
+.account-container {
+  position: relative;
+  height: 100%;
+  display: inline-flex;
+  align-items: center;
+}
+
+.account-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  min-width: 120px; 
+  background: #f5f5f5;
+  padding: 15px 0;
+  z-index: 10;
+  box-shadow: none;
+  margin-top: -1px;
+  
+  display: none;
+}
+
+.account-container:hover .account-dropdown {
+  display: block;
+}
+
+.dropdown-items {
+  padding: 0 0px;
+}
+
+.dropdown-item {
+  padding-left: 5px; 
+}

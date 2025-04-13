@@ -34,7 +34,23 @@
             <button class="search-button">➔</button>
           </div>
         </div>
-        <span class="nav-item account">ACCOUNT</span>
+        
+        <div class="account-container"
+          (mouseenter)="expandAccount()"
+          (mouseleave)="collapseHeader()">
+          <span class="nav-item">ACCOUNT</span>
+          <div class="account-dropdown" *ngIf="accountActive">
+            <div class="dropdown-items" *ngIf="isLogged | else unlogged">
+              <a class="dropdown-item">PROFILE</a>
+              <a class="dropdown-item">LOG OUT</a>
+            </div>
+            <ng-template #unlogged class="account-dropdown">
+              <a class="dropdown-item">LOGIN</a>
+              <a class="dropdown-item">SIGN UP</a>
+            </ng-template>
+          </div>
+        </div>
+        
       </div>
     </div>
   </nav>
