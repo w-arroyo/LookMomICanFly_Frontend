@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map, catchError } from 'rxjs';
+import { BehaviorSubject, Observable, map, catchError, throwError } from 'rxjs';
 import { ProductSummary } from '../../models/product_summary.model';
 
 @Injectable({
@@ -8,9 +8,9 @@ import { ProductSummary } from '../../models/product_summary.model';
 })
 export class ProductSummaryService {
 
-  private baseUrl: string='http://localhost:8080/api/users/login';
+  private baseUrl: string='http://localhost:8080/api/products';
   private httpClient: HttpClient;
-  private productListBehaviorSubject=new BehaviorSubject<ProductSummary[]>([]);
+  productListBehaviorSubject=new BehaviorSubject<ProductSummary[]>([]);
 
   constructor(httpClient: HttpClient) { 
     this.httpClient=httpClient;
@@ -21,26 +21,20 @@ export class ProductSummaryService {
   }
 
   productsByCategory(category:string): void{
-    this.httpClient.get<{message:string,products:ProductSummary[]}>(`${this.baseUrl}/get/all-summary-by-category/?category=${category}`).pipe(
-      map(
-        (response) =>{
-          if('message' in response){
-            this.productListBehaviorSubject.next(response.products);
-          }
-          else{
-            this.emptyProductList();
-            //console.log(response.getError);
-          }
-        }
-      ),
+    this.httpClient.get<ProductSummary[]>(`${this.baseUrl}/get/all-summary-by-category/?category=${category}`).pipe(
       catchError(
         (error) =>{
           this.emptyProductList();
-          console.log(error);
-          throw error;
+          const message= error.error?.error || 'Server error.';
+          return throwError(()=>new Error(message));
         }
       )
-    );
+    ).subscribe({
+      next: (response) => {
+        this.productListBehaviorSubject.next(response);
+      },
+      error: (error) => console.log(error.message)
+    });
   }
 
   private emptyProductList(){

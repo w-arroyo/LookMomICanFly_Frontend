@@ -15,6 +15,10 @@ export const routes: Routes = [
         component: AuthenticationComponent
     },
     {
+        path:'products',
+        loadChildren: ()=> import('./routes/product.routes').then(route=> route.routes)
+    },
+    {
         path:'**', redirectTo:'home'
     }
 

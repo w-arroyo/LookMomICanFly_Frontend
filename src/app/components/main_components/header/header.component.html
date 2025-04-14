@@ -10,16 +10,16 @@
     <div class="dropdown-content">
       <h3 class="dropdown-title">CATEGORIES</h3>
       <div class="dropdown-items">
-        <a class="dropdown-item" *ngFor="let category of categories">{{category}}</a>
+        <a class="dropdown-item" *ngFor="let category of categories" (click)="redirectToCategory(category)">{{category}}</a>
       </div>
     </div>
   </div>
 </div>
-        <span class="nav-item best-sellers">BEST SELLERS</span>
+        <span class="nav-item best-sellers" (click)="redirectToBestSellers()">BEST SELLERS</span>
       </div>
     </div>
 
-    <div class="logo-container">
+    <div class="logo-container" (click)="redirectHome()">
       <img src="logo.png" alt="Logo" class="logo">
     </div>
 
@@ -30,8 +30,8 @@
              (mouseleave)="collapseHeader()">
           <span class="nav-item">SEARCH</span>
           <div class="search-box" *ngIf="searchActive">
-            <input type="text" class="search-input">
-            <button class="search-button">➔</button>
+            <input type="text" class="search-input" [(ngModel)]="search">
+            <button class="search-button" (click)="searchItems()">➔</button>
           </div>
         </div>
         
@@ -40,13 +40,12 @@
           (mouseleave)="collapseHeader()">
           <span class="nav-item">ACCOUNT</span>
           <div class="account-dropdown" *ngIf="accountActive">
-            <div class="dropdown-items" *ngIf="isLogged | else unlogged">
+            <div class="dropdown-items" *ngIf="isLogged ; else unlogged">
               <a class="dropdown-item">PROFILE</a>
-              <a class="dropdown-item">LOG OUT</a>
+              <a class="dropdown-item" (click)="logout()">LOG OUT</a>
             </div>
             <ng-template #unlogged class="account-dropdown">
-              <a class="dropdown-item">LOGIN</a>
-              <a class="dropdown-item">SIGN UP</a>
+              <a class="dropdown-item" routerLink="/authentication">LOGIN</a>
             </ng-template>
           </div>
         </div>

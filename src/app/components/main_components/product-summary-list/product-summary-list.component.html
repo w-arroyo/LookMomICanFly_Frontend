@@ -1,1 +1,8 @@
-<p>product-summary-list works!</p>
+<div class="product-list">
+  <ng-container *ngIf="productList$ | async as products">
+    <app-product-summary-details
+      *ngFor="let product of products" 
+      [productSummary]="product">
+    </app-product-summary-details>
+  </ng-container>
+</div>

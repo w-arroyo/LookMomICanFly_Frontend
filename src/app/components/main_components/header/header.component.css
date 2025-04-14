@@ -184,8 +184,8 @@
 
 .account-dropdown {
   position: absolute;
-  top: 100%;
-  left: 0;
+  top: 80%;
+  left: 5;
   width: 100%;
   min-width: 120px; 
   background: #f5f5f5;
@@ -193,7 +193,6 @@
   z-index: 10;
   box-shadow: none;
   margin-top: -1px;
-  
   display: none;
 }
 

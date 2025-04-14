@@ -1,9 +1,9 @@
 export class ProductSummary{
 
     private id!: string;
-    private name!: string;
-    private year!: number;
-    private manufacturer!: string;
+    name!: string;
+    year!: number;
+    manufacturer!: string;
     private category!: string;
 
     public getId(): string {
