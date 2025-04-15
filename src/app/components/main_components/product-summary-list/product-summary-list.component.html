@@ -1,8 +1,22 @@
-<div class="product-list">
-  <ng-container *ngIf="productList$ | async as products">
-    <app-product-summary-details
-      *ngFor="let product of products" 
-      [productSummary]="product">
-    </app-product-summary-details>
-  </ng-container>
+<div class="product-list-container">
+  <button class="filter-toggle" (click)="activateFilterComponent()">FILTER</button>
+  
+  <!-- Lista de productos -->
+  <div class="product-list">
+    <ng-container *ngIf="productList$ | async as products">
+      <ng-container *ngIf="products.length > 0; else noProducts">
+        <app-product-summary-details
+          *ngFor="let product of products" 
+          [productSummary]="product">
+        </app-product-summary-details>
+      </ng-container>
+      <ng-template #noProducts>
+        <div class="no-products-message">
+          NO PRODUCTS WERE FOUND
+        </div>
+      </ng-template>
+    </ng-container>
+  </div>
+  
+  <app-filter-products></app-filter-products>
 </div>

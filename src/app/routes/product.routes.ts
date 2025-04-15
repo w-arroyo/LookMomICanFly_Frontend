@@ -5,5 +5,17 @@ export const routes: Routes = [
     {
         path:'category/:category',
         component: ProductSummaryListComponent
+    },
+    {
+        path:'search/:product-name',
+        component:ProductSummaryListComponent
+    },
+    {
+        path:'best-sellers',
+        component:ProductSummaryListComponent
+    },
+    {
+        path:'all',
+        component:ProductSummaryListComponent
     }
 ]

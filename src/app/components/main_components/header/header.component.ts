@@ -98,7 +98,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.router.navigate(['/home']);
   }
 
+  redirectToProducts(){
+    this.productSummaryService.allProducts();
+    this.router.navigate(['/products/all']);
+  }
+
   redirectToBestSellers(): void{
+    this.productSummaryService.productsByBestSellers();
     this.router.navigate(['/products/best-sellers'])
   }
 
@@ -109,6 +115,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   searchItems(): void{
     if(this.search.trim()!=='')
+      this.productSummaryService.productsBySearch(this.search);
       this.router.navigate([`/products/search/${this.search}`])    
   }
 

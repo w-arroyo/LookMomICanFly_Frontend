@@ -1,0 +1,37 @@
+<div class="filter-overlay" *ngIf="isOpen" (click)="closeFilterEvent()"></div>
+
+<div class="filter-container" [class.open]="isOpen">
+  <div class="filter-header">
+    <h2>SORT PRODUCTS</h2>
+    <button class="close-btn" (click)="closeFilterEvent()">&times;</button>
+  </div>
+  
+  <div class="filter-content">
+    <div class="filter-section">
+      <h3>RELEASE DATE</h3>
+      <div class="filter-options">
+        <label *ngFor="let year of yearList">
+          <input type="checkbox" [value]="year"> 
+          <span class="custom-checkbox"></span>
+          {{year}}
+        </label>
+      </div>
+    </div>
+    
+    <div class="filter-section">
+      <h3>COLOR</h3>
+      <div class="filter-options">
+        <label *ngFor="let color of colors">
+          <input type="checkbox" [value]="color">
+          <span class="custom-checkbox"></span>
+          {{color}}
+        </label>
+      </div>
+    </div>
+  </div>
+  
+  <div class="filter-footer">
+    <button class="clear-btn">CLEAR</button>
+    <button class="apply-btn" (click)="applyFilters()">FILTER</button>
+  </div>
+</div>

@@ -5,7 +5,7 @@
         <div class="products-container" 
      (mouseenter)="expandCategories()" 
      (mouseleave)="collapseHeader()">
-  <span class="nav-item">PRODUCTS</span>
+  <span class="nav-item" (click)="redirectToProducts()">PRODUCTS</span>
   <div class="categories-dropdown" *ngIf="showCategories">
     <div class="dropdown-content">
       <h3 class="dropdown-title">CATEGORIES</h3>

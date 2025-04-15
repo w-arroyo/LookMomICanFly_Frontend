@@ -1,12 +1,12 @@
 export class ProductSummary{
 
-    private id!: string;
+    id!: string;
     name!: string;
     year!: number;
     manufacturer!: string;
     private category!: string;
 
-    public getId(): string {
+    getId(): string {
         return this.id;
     }
     public setId(value: string) {

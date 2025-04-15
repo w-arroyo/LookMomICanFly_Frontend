@@ -1,3 +1,27 @@
+.product-list-container {
+  position: relative;
+}
+
+.filter-toggle {
+  position: fixed;
+  top: 120px;
+  left: 20px;
+  z-index: 100;
+  background-color: #f5f5f5;
+  color: #212121;
+  border: 1px solid #e0e0e0;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-toggle:hover {
+  background-color: #e0e0e0;
+}
+
 .product-list {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -5,19 +29,59 @@
   padding: 7px;
   max-width: 1450px;
   margin: 0 auto;
-  margin-top: 80px;
+  margin-top: 100px;
+  min-height: 300px; 
 }
-  
-  @media (max-width: 768px) {
-    .product-list {
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 16px;
-      padding: 16px;
-    }
+
+.no-products-message {
+  grid-column: 1 / -1; 
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #212121;
+  letter-spacing: 1px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  margin: 20px 0;
+  min-height: 330px; 
+}
+
+@media (max-width: 768px) {
+  .filter-toggle {
+    top: 100px;
+    left: 16px;
+    padding: 6px 12px;
   }
   
-  @media (max-width: 480px) {
-    .product-list {
-      grid-template-columns: 1fr;
-    }
+  .product-list {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    padding: 16px;
+    margin-top: 80px;
   }
+  
+  .no-products-message {
+    font-size: 20px;
+    padding: 40px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .filter-toggle {
+    top: 80px;
+    left: 10px;
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+  
+  .product-list {
+    grid-template-columns: 1fr;
+    margin-top: 60px;
+  }
+  
+  .no-products-message {
+    font-size: 18px;
+    padding: 30px 10px;
+  }
+}

@@ -16,12 +16,32 @@ export class ProductSummaryService {
     this.httpClient=httpClient;
   }
 
-  getProductListObservable(): Observable<ProductSummary[]>{
-    return this.productListBehaviorSubject.asObservable();
+  allProducts(){
+    this.handleBackendResponse(
+      this.httpClient.get<ProductSummary[]>(`${this.baseUrl}/get/all-summary`)
+    );
   }
 
   productsByCategory(category:string): void{
-    this.httpClient.get<ProductSummary[]>(`${this.baseUrl}/get/all-summary-by-category/?category=${category}`).pipe(
+    this.handleBackendResponse(
+      this.httpClient.get<ProductSummary[]>(`${this.baseUrl}/get/all-summary-by-category/?category=${category}`)
+    );
+  }
+
+  productsBySearch(productName: string): void{
+    this.handleBackendResponse(
+      this.httpClient.get<ProductSummary[]>(`${this.baseUrl}/find/?name=${productName}`)
+    );
+  }
+
+  productsByBestSellers(): void{
+    this.handleBackendResponse(
+      this.httpClient.get<ProductSummary[]>(`${this.baseUrl}/best-sellers`)
+    );
+  }
+
+  private handleBackendResponse(response: Observable<ProductSummary[]>): void{
+    response.pipe(
       catchError(
         (error) =>{
           this.emptyProductList();
