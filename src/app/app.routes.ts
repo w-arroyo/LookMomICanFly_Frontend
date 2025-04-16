@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { HomeCarouselComponent } from './components/secondary_components/home-carousel/home-carousel.component';
-import { AuthenticationComponent } from './components/main_components/authentication/authentication.component';
 
 export const routes: Routes = [
     {
@@ -12,7 +11,7 @@ export const routes: Routes = [
     },
     {
         path:'authentication',
-        component: AuthenticationComponent
+        loadChildren: ()=> import('./routes/authentication.routes').then(route=> route.routes)
     },
     {
         path:'products',

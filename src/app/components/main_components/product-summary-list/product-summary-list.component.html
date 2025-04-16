@@ -1,9 +1,14 @@
 <div class="product-list-container">
-  <button class="filter-toggle" (click)="activateFilterComponent()">FILTER</button>
-  
-  <!-- Lista de productos -->
+  <ng-container *ngIf="productList$ | async as products">
+    <div class="filter-button-container" *ngIf="products.length > 0">
+      <button class="filter-toggle" (click)="activateFilterComponent()">
+        <span class="filter-icon">☰</span> FILTER
+      </button>
+    </div>
+  </ng-container>
+
   <div class="product-list">
-    <ng-container *ngIf="productList$ | async as products">
+    <ng-container *ngIf="currentShownProducts$ | async as products">
       <ng-container *ngIf="products.length > 0; else noProducts">
         <app-product-summary-details
           *ngFor="let product of products" 
@@ -17,6 +22,34 @@
       </ng-template>
     </ng-container>
   </div>
-  
-  <app-filter-products></app-filter-products>
+
+  <button class="scroll-to-top" *ngIf="showScrollButton" (click)="scrollToTop()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <ng-container *ngIf="productList$ | async as products">
+    <app-filter-products *ngIf="products.length > 0"></app-filter-products>
+  </ng-container>
+
+  <ng-container *ngIf="productList$ | async as products">
+    <div class="pagination-container"*ngIf="products.length > 0">
+      <button class="pagination-button pagination-prev" *ngIf="currentPage>1" (click)="previousPage()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#212121" stroke-width="2">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+      </button>
+      
+      <div class="pagination-pages">
+        <span class="pagination-page active">{{currentPage}}</span>
+      </div>
+      
+      <button class="pagination-button pagination-next" *ngIf="currentPage<maxPages" (click)="nextPage()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#212121" stroke-width="2">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </button>
+    </div>
+  </ng-container>
 </div>

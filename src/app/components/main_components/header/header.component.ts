@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
 import { Router, RouterLinkWithHref } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -13,7 +13,7 @@ import { ProductSummaryService } from '../../../services/product_summary/product
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class HeaderComponent implements OnInit{
 
   private httpClient: HttpClient;
   private authenticationService: AuthenticationService;
@@ -25,9 +25,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   accountActive= false;
   headerHeight = 60;
   search: string='';
-  destroyStream= new Subject<void>();
-  categories: String[]=[];
-  isLogged: boolean=false;
+  categories$!: Observable<string[]>;
+  isLogged$!: Observable<boolean>;
 
   constructor(httpClient: HttpClient, authenticationService:AuthenticationService, router: Router, productSummaryService: ProductSummaryService){
     this.httpClient=httpClient;
@@ -37,30 +36,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void{
-    this.httpClient.get<{categories: String[]}>(`http://localhost:8080/api/products/categories/`).pipe(
-      takeUntil(this.destroyStream)
-    )
-    .subscribe({
-      next: (categories) => {
-        this.categories=categories.categories;
-      },
-      error: (error) => {console.log(error)}
-    });
-    this.authenticationService.isLogged$.pipe(
-      takeUntil(this.destroyStream)
-    )
-    .subscribe({
-      next: (data)=> this.isLogged=data,
-      error: (error) => {
-        console.log(error);
-        this.isLogged=false;
-      }
-    });
-  }
-
-  ngOnDestroy(): void{
-    this.destroyStream.next();
-    this.destroyStream.complete();
+    this.categories$=this.httpClient.get<string[]>(`http://localhost:8080/api/products/categories/`)
+    this.isLogged$=this.authenticationService.isLoggedSubject.asObservable();
   }
 
   expandCategories(): void{
@@ -95,28 +72,35 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   redirectHome(): void{
+    this.productSummaryService.emptyProductList();
+    this.productSummaryService.currentCategorySubject.next(null);
     this.router.navigate(['/home']);
   }
 
   redirectToProducts(){
     this.productSummaryService.allProducts();
+    this.productSummaryService.currentCategorySubject.next(null);
     this.router.navigate(['/products/all']);
   }
 
   redirectToBestSellers(): void{
     this.productSummaryService.productsByBestSellers();
+    this.productSummaryService.currentCategorySubject.next(null);
     this.router.navigate(['/products/best-sellers'])
   }
 
-  redirectToCategory(category: String): void{
-    this.productSummaryService.productsByCategory(category+'');
+  redirectToCategory(category: string): void{
+    this.productSummaryService.productsByCategory(category);
+    this.productSummaryService.currentCategorySubject.next(category);
     this.router.navigate([`/products/category/${category.toLowerCase()}`])
   }
 
   searchItems(): void{
-    if(this.search.trim()!=='')
+    if(this.search.trim()!==''){
       this.productSummaryService.productsBySearch(this.search);
+      this.productSummaryService.currentCategorySubject.next(null);
       this.router.navigate([`/products/search/${this.search}`])    
+    }
   }
 
 }

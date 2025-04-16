@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LoginRequestData } from '../../../models/login.model';
 import { UserRegistration } from '../../../models/register.model';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -13,9 +13,10 @@ import { Observable } from 'rxjs';
   templateUrl: './authentication.component.html',
   styleUrl: './authentication.component.css'
 })
-export class AuthenticationComponent {
+export class AuthenticationComponent implements OnInit {
 
   private authenticationService: AuthenticationService;
+  private activatedRoute:ActivatedRoute;
   private router: Router;
   isLoginMode = true;
   loginCredentials: LoginRequestData;
@@ -25,11 +26,18 @@ export class AuthenticationComponent {
   errorMessage: string='';
   errorsExist: boolean=false;
 
-  constructor(authenticationService: AuthenticationService, router:Router){
+  constructor(authenticationService: AuthenticationService, router:Router,activatedRoute:ActivatedRoute){
     this.authenticationService=authenticationService;
     this.router=router;
     this.loginCredentials=new LoginRequestData();
     this.registrationCredentials=new UserRegistration();
+    this.activatedRoute=activatedRoute;
+  }
+
+  ngOnInit(): void {
+    const param=this.activatedRoute.snapshot.paramMap.get('authentication');
+    if(param!=null && param==='create-account')
+      this.isLoginMode=false;
   }
 
   switchMode(): void{
@@ -38,6 +46,10 @@ export class AuthenticationComponent {
     this.emailInput='';
     this.passwordInput='';
     this.registrationCredentials.name='';
+    if(this.isLoginMode){
+      this.router.navigate(['/authentication/login']);
+    }
+    else this.router.navigate(['/authentication/create-account']);
   }
 
   authenticate(): void{

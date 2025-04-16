@@ -7,6 +7,18 @@
   </div>
   
   <div class="filter-content">
+
+    <div class="filter-section" *ngIf="category">
+      <h3>SUBCATEGORY</h3>
+      <div class="filter-options">
+        <label *ngFor="let subcategory of subcategories">
+          <input type="checkbox" [value]="subcategory"> 
+          <span class="custom-checkbox"></span>
+          {{subcategory}}
+        </label>
+      </div>
+    </div>
+
     <div class="filter-section">
       <h3>RELEASE DATE</h3>
       <div class="filter-options">
@@ -14,6 +26,17 @@
           <input type="checkbox" [value]="year"> 
           <span class="custom-checkbox"></span>
           {{year}}
+        </label>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <h3>MANUFACTURER</h3>
+      <div class="filter-options">
+        <label *ngFor="let manufacturer of manufacturers">
+          <input type="checkbox" [value]="manufacturer"> 
+          <span class="custom-checkbox"></span>
+          {{manufacturer}}
         </label>
       </div>
     </div>

@@ -10,7 +10,11 @@
     <div class="dropdown-content">
       <h3 class="dropdown-title">CATEGORIES</h3>
       <div class="dropdown-items">
+
+      <ng-container *ngIf="categories$ | async as categories">
         <a class="dropdown-item" *ngFor="let category of categories" (click)="redirectToCategory(category)">{{category}}</a>
+      </ng-container>
+
       </div>
     </div>
   </div>
@@ -40,13 +44,20 @@
           (mouseleave)="collapseHeader()">
           <span class="nav-item">ACCOUNT</span>
           <div class="account-dropdown" *ngIf="accountActive">
-            <div class="dropdown-items" *ngIf="isLogged ; else unlogged">
-              <a class="dropdown-item">PROFILE</a>
-              <a class="dropdown-item" (click)="logout()">LOG OUT</a>
-            </div>
-            <ng-template #unlogged class="account-dropdown">
-              <a class="dropdown-item" routerLink="/authentication">LOGIN</a>
+            
+              <div class="dropdown-items" *ngIf="isLogged$ | async; else unlogged">
+                <a class="dropdown-item">PROFILE</a>
+                <a class="dropdown-item" (click)="logout()">LOG OUT</a>
+              </div>
+            
+
+            <ng-template #unlogged>
+              <div class="dropdown-items">
+                <a class="dropdown-item" routerLink="/authentication/login">LOGIN</a>
+                <a class="dropdown-item" routerLink="/authentication/create-account">SIGN UP</a>
+              </div>
             </ng-template>
+
           </div>
         </div>
         

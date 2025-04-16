@@ -11,6 +11,7 @@ export class ProductSummaryService {
   private baseUrl: string='http://localhost:8080/api/products';
   private httpClient: HttpClient;
   productListBehaviorSubject=new BehaviorSubject<ProductSummary[]>([]);
+  currentCategorySubject:BehaviorSubject<string | null>=new BehaviorSubject<string | null>(null);
 
   constructor(httpClient: HttpClient) { 
     this.httpClient=httpClient;
@@ -57,7 +58,7 @@ export class ProductSummaryService {
     });
   }
 
-  private emptyProductList(){
+  emptyProductList(){
     this.productListBehaviorSubject.next([]);
   }
 

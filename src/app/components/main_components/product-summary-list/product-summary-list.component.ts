@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, OnDestroy, OnInit, Output } from '@angular/core';
 import { ProductSummaryService } from '../../../services/product_summary/product-summary.service';
 import { ProductSummaryDetailsComponent } from '../../secondary_components/product-summary-details/product-summary-details.component';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable, Subject, takeUntil, tap } from 'rxjs';
 import { ProductSummary } from '../../../models/product_summary.model';
 import { ActivatedRoute } from '@angular/router';
 import { FilterProductsComponent } from '../../secondary_components/filter-products/filter-products.component';
@@ -18,33 +18,79 @@ export class ProductSummaryListComponent implements OnInit, OnDestroy {
 
   private productSummaryService: ProductSummaryService;
   productList$: Observable<ProductSummary[]>;
+  private MAX_PRODUCTS_SHOWN: number=12;
+  private currentShownProductsRangeSubject: BehaviorSubject<number[]>=new BehaviorSubject<number[]>([0,this.MAX_PRODUCTS_SHOWN]);
+  currentShownProducts$:Observable<any>;
   private activatedRoute: ActivatedRoute;
   private filterProductsService:FilterProductsService;
+  private destroyStream: Subject<void>=new Subject<void>();
+  maxPages!:number;
+  currentPage: number=1;
+  showScrollButton: boolean = false;
 
   constructor(productSummaryService: ProductSummaryService, activatedRoute: ActivatedRoute, filterProductsService:FilterProductsService){
-    this.productSummaryService=productSummaryService;
-    this.productList$=productSummaryService.productListBehaviorSubject.asObservable();
+    this.productSummaryService=productSummaryService; 
     this.activatedRoute=activatedRoute;
     this.filterProductsService=filterProductsService;
+    this.productList$=productSummaryService.productListBehaviorSubject.asObservable().pipe(
+      tap(
+        (products)=>{
+          this.maxPages=Math.ceil(products.length/this.MAX_PRODUCTS_SHOWN);
+          if(this.currentPage>1){
+            this.currentPage=1;
+            this.currentShownProductsRangeSubject.next([0,this.MAX_PRODUCTS_SHOWN]);
+          }
+        }
+      )
+    );
+
+    this.currentShownProducts$ = combineLatest([
+      this.productList$,
+      this.currentShownProductsRangeSubject
+    ]).pipe(
+      map(([products, range]) => products.slice(range[0], range[1]))
+    );
   }
 
   ngOnInit(): void {
+    this.checkScrollPosition();
     if(this.productSummaryService.productListBehaviorSubject.value.length==0){
-      let path='';
-      this.activatedRoute.url.subscribe(
+      this.activatedRoute.url.pipe(
+        takeUntil(
+          this.destroyStream
+        )
+      )
+      .subscribe(
       parts=>{
-        path = parts.map(part => part.path).join('/');
+        this.filterProducts(parts.map(part => part.path).join('/'));
       }
     );
-    this.filterProducts(path);
     }
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  onWindowScroll() {
+    this.checkScrollPosition();
+  }
+
+  private checkScrollPosition() {
+    this.showScrollButton = window.pageYOffset > 300;
+  }
+
+  scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   }
 
   private filterProducts(path:string):void{
     if(path.includes('category')){
       const category=this.activatedRoute.snapshot.paramMap.get('category');
-      if(category!=null && category.trim()!=='')
+      if(category!=null && category.trim()!==''){
         this.productSummaryService.productsByCategory(category);
+        this.productSummaryService.currentCategorySubject.next(category);
+      }
     }
     else if(path.includes('search')){
       const productName=this.activatedRoute.snapshot.paramMap.get('product-name');
@@ -68,8 +114,27 @@ export class ProductSummaryListComponent implements OnInit, OnDestroy {
     this.filterProductsService.isVisibleSubject.next(false);
   }
 
+  previousPage(){
+    if(this.currentPage>1){
+      this.currentPage--;
+      const currentRange=this.currentShownProductsRangeSubject.value;
+      this.currentShownProductsRangeSubject.next([currentRange[0]-this.MAX_PRODUCTS_SHOWN,currentRange[1]-this.MAX_PRODUCTS_SHOWN]);
+      this.scrollToTop();
+    }
+  }
+
+  nextPage(){
+    if(this.currentPage+1<=this.maxPages){
+      this.currentPage++;
+      const currentRange=this.currentShownProductsRangeSubject.value;
+      this.currentShownProductsRangeSubject.next([currentRange[0]+this.MAX_PRODUCTS_SHOWN,currentRange[1]+this.MAX_PRODUCTS_SHOWN]);
+      this.scrollToTop();
+    }
+  }
+
   ngOnDestroy(): void {
-    
+    this.destroyStream.next();
+    this.destroyStream.complete();
   }
 
 }

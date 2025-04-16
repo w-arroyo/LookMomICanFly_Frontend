@@ -13,8 +13,7 @@ export class AuthenticationService implements OnInit {
   private httpClient: HttpClient;
   private URL: string= 'http://localhost:8080/api/users';
   private tokenBehaviourSubject= new BehaviorSubject<string | null>(null);
-  private isLoggedSubject=new BehaviorSubject<boolean>(false);
-  isLogged$=this.isLoggedSubject.asObservable();
+  isLoggedSubject=new BehaviorSubject<boolean>(false);
 
   constructor(httpClient:HttpClient) {
     this.httpClient=httpClient;
