@@ -4,7 +4,7 @@ import { ProductSummaryService } from '../../../services/product_summary/product
 import { ProductSummaryDetailsComponent } from '../../secondary_components/product-summary-details/product-summary-details.component';
 import { BehaviorSubject, combineLatest, map, Observable, Subject, takeUntil, tap } from 'rxjs';
 import { ProductSummary } from '../../../models/product_summary.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FilterProductsComponent } from '../../secondary_components/filter-products/filter-products.component';
 import { FilterProductsService } from '../../../services/filter_products/filter-products.service';
 
@@ -22,16 +22,18 @@ export class ProductSummaryListComponent implements OnInit, OnDestroy {
   private currentShownProductsRangeSubject: BehaviorSubject<number[]>=new BehaviorSubject<number[]>([0,this.MAX_PRODUCTS_SHOWN]);
   currentShownProducts$:Observable<any>;
   private activatedRoute: ActivatedRoute;
+  private router:Router;
   private filterProductsService:FilterProductsService;
   private destroyStream: Subject<void>=new Subject<void>();
   maxPages!:number;
   currentPage: number=1;
   showScrollButton: boolean = false;
 
-  constructor(productSummaryService: ProductSummaryService, activatedRoute: ActivatedRoute, filterProductsService:FilterProductsService){
+  constructor(productSummaryService: ProductSummaryService, activatedRoute: ActivatedRoute, filterProductsService:FilterProductsService,router:Router){
     this.productSummaryService=productSummaryService; 
     this.activatedRoute=activatedRoute;
     this.filterProductsService=filterProductsService;
+    this.router=router;
     this.productList$=productSummaryService.productListBehaviorSubject.asObservable().pipe(
       tap(
         (products)=>{
@@ -130,6 +132,10 @@ export class ProductSummaryListComponent implements OnInit, OnDestroy {
       this.currentShownProductsRangeSubject.next([currentRange[0]+this.MAX_PRODUCTS_SHOWN,currentRange[1]+this.MAX_PRODUCTS_SHOWN]);
       this.scrollToTop();
     }
+  }
+
+  goToProduct(id:string,category:string){
+    this.router.navigate([`/products/${category.toLowerCase()}/details/${id}`]);
   }
 
   ngOnDestroy(): void {

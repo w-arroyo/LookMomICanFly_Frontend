@@ -16,14 +16,7 @@ export class AskService {
   }
 
   getLowestAskAmount(productId: string): Observable<any>{
-    return this.httpClient.get<SuccessfullRequest>(`${this.baseUrl}/get/lowest-ask/?productId=${productId}`).pipe(
-      catchError(
-        (error)=>{
-          const message= error.error?.error || 'Server error.';
-          return throwError(()=>new Error(message));
-        }
-      )
-    );
+    return this.httpClient.get<SuccessfullRequest>(`${this.baseUrl}/get/lowest-ask/?productId=${productId}`);
   }
 
 }

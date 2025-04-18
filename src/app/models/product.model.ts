@@ -1,13 +1,13 @@
 export class Product{
 
-    private id!: string;
-    private name!: string;
-    private category!: string;
-    private subcategory!: string;
-    private manufacturer!: string;
-    private releaseYear!: number;
-    private active!: boolean;
-    private colors!: string[];
+    id!: string;
+    name!: string;
+    category!: string;
+    subcategory!: string;
+    manufacturer!: string;
+    releaseYear!: number;
+    active!: boolean;
+    colors!: string[];
     
     public getId(): string {
         return this.id;

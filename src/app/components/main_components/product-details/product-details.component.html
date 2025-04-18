@@ -1,0 +1,74 @@
+<div class="product-detail-container" *ngIf="product$ | async as product; else loading">
+  <!-- Mensaje si el producto no está activo -->
+  <ng-container *ngIf="!product.active">
+    <div class="inactive-product-message">
+      <p>This product is no longer available</p>
+      <button class="return-button" (click)="goToHomeScreen()">Return to Home</button>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="product.active">
+    <div class="breadcrumbs">
+      <span class="breadcrumb" (click)="goToHomeScreen()"> PRODUCTS </span>
+      <span class="separator">/</span>
+      <span class="breadcrumb"> {{product.category}} </span>
+      <span class="separator">/</span>
+      <span class="breadcrumb current"> {{product.name.toUpperCase()}}</span>
+    </div>
+
+    <div class="product-content">
+      <div class="product-image-container">
+        <img [src]="getProductImage(product.name)" [alt]="product.name" class="product-image">
+      </div>
+
+      <div class="product-info">
+        <div class="product-header">
+          <h1 class="product-name">{{product.name}}</h1>
+          <button class="like-button" (click)="toggleLike()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" 
+                 [attr.stroke]="isLiked ? '#ff0000' : '#212121'" 
+                 [attr.fill]="isLiked ? '#ff0000' : 'none'"
+                 stroke-width="2">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="product-manufacturer">{{product.manufacturer.toUpperCase()}}</div>
+        <div class="product-year">Released: {{product.releaseYear}}</div>
+        <div class="product-reference">REFERENCE: </div>
+
+        <div class="color-options" *ngIf="product.colors && product.colors.length > 0">
+          <label class="color-label">COLORS: </label>
+          <div class="color-selection">
+            <div *ngFor="let color of product.colors" 
+                 class="color-option" 
+                 [style.background-color]="color.toLowerCase()"
+                 [title]="color">
+            </div>
+          </div>
+        </div>
+
+        <app-post-table [productId]="product.id"></app-post-table>
+
+        <div class="action-buttons">
+          <button class="buy-button">BUY / BID</button>
+          <button class="sell-button">SELL / ASK</button>
+        </div>
+
+        <div class="product-tabs">
+          <button class="tab-button active">Details</button>
+          <button class="tab-button">Measurements</button>
+          <button class="tab-button">Size Guide</button>
+          <button class="tab-button">Need Help?</button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #loading>
+  <div class="loading-spinner">
+    Loading product details...
+  </div>
+</ng-template>
