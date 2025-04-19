@@ -1,14 +1,7 @@
-import { Product } from "./Product.model";
+import { Product } from "./product.model";
 
 export class Electronic extends Product{
 
-    private caution!: boolean;
-
-    public getCaution(): boolean {
-        return this.caution;
-    }
-    public setCaution(value: boolean) {
-        this.caution = value;
-    }
+    caution!: boolean;
 
 }

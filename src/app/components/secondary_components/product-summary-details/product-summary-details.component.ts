@@ -3,6 +3,8 @@ import { ProductSummary } from '../../../models/product_summary.model';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AskService } from '../../../services/ask/ask.service';
+import { catchError, Observable, throwError } from 'rxjs';
+import { SuccessfullRequest } from '../../../models/successful_request.model';
 
 @Component({
   selector: 'app-product-summary-details',
@@ -14,7 +16,7 @@ export class ProductSummaryDetailsComponent implements OnInit{
 
   private router:Router;
   private askService: AskService;
-  askAmount!: string;
+  askAmount$!: Observable<SuccessfullRequest>;
   @Input() productSummary!: ProductSummary;
 
   constructor(router:Router, askService: AskService){
@@ -23,15 +25,14 @@ export class ProductSummaryDetailsComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.askService.getLowestAskAmount(this.productSummary.id).subscribe({
-      next: (data) =>{
-        this.askAmount=data.message;
-      },
-      error: (error) =>{
-        console.log(error.message);
-        this.askAmount=' -';
-      }
-  });
+    this.askAmount$=this.askService.getLowestAskAmount(this.productSummary.id).pipe(
+      catchError(
+        (error)=>{
+          const message= error.error?.error || 'Server error.';
+          return throwError(()=>new Error(message));
+        }
+      )
+    )
   }
 
   getImage(name: String): string{

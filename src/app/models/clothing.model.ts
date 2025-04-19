@@ -1,14 +1,7 @@
-import { Product } from "./Product.model";
+import { Product } from "./product.model";
 
 export class Clothing extends Product{
 
-    private season!: string;
-
-    public getSeason(): string {
-        return this.season;
-    }
-    public setSeason(value: string) {
-        this.season = value;
-    }
-
+    season!: string;
+    
 }

@@ -6,6 +6,8 @@
     <div class="product-name">{{productSummary.name}}</div>
     <div class="product-manufacturer">{{productSummary.manufacturer}}</div>
     <div class="product-year">{{productSummary.year}}</div>
-    <div class="product-price">Starting at: {{askAmount}}</div>
+    <ng-container *ngIf="askAmount$ | async as askAmount">
+      <div class="product-price">Starting at: {{askAmount.message ? askAmount.message : '-'}}</div>
+    </ng-container>
   </div>
 </div>

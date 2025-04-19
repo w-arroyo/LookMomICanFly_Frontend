@@ -1,17 +1,7 @@
-import { Product } from "./Product.model";
+import { Product } from "./product.model";
 
 export class Sneakers extends Product{
 
-    private sku!: string;
-
-
-    public getSku(): string {
-        return this.sku;
-    }
-    public setSku(value: string) {
-        this.sku = value;
-    }
-
-    
+    sku!: string;
 
 }

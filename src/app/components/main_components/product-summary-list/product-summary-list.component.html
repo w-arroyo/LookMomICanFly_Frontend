@@ -12,7 +12,8 @@
       <ng-container *ngIf="products.length > 0; else noProducts">
         <app-product-summary-details
           *ngFor="let product of products" 
-          [productSummary]="product">
+          [productSummary]="product"
+          (click)="goToProduct(product.id,product.category)">
         </app-product-summary-details>
       </ng-container>
       <ng-template #noProducts>
