@@ -89,7 +89,6 @@
     }
   }
   
-  /* Responsive */
   @media (max-width: 768px) {
     .site-footer {
       padding: 15px 0;

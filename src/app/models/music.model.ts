@@ -1,14 +1,7 @@
-import { Product } from "./Product.model";
+import { Product } from "./product.model";
 
 export class Music extends Product{
-
-    private format!: string;
     
-    public getFormat(): string {
-        return this.format;
-    }
-    public setFormat(value: string) {
-        this.format = value;
-    }
+    format!: string;
 
 }

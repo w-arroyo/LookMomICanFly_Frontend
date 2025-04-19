@@ -7,6 +7,14 @@ import { Sneakers } from '../../../models/sneakers.model';
 import { PostTableComponent } from '../../secondary_components/post-table/post-table.component';
 import { PostService } from '../../../services/post/post.service';
 import { SuccessfullRequest } from '../../../models/successful_request.model';
+import { Product } from '../../../models/product.model';
+import { Clothing } from '../../../models/clothing.model';
+import { Accessory } from '../../../models/accessory.model';
+import { Collectible } from '../../../models/collectible.model';
+import { Electronic } from '../../../models/electronic.model';
+import { Football } from '../../../models/football.model';
+import { Skateboard } from '../../../models/skateboard.model';
+import { Music } from '../../../models/music.model';
 
 @Component({
   selector: 'app-product-details',
@@ -20,9 +28,10 @@ export class ProductDetailsComponent implements OnInit, OnDestroy{
   private activatedRoute:ActivatedRoute;
   private productDetailsService:ProductDetailsService;
   postService:PostService;
-  product$!:Observable<Sneakers>;
+  product$!:Observable<Product>;
   private destroyStream:Subject<void>=new Subject<void>();
   productPostDetails$:Observable<Observable<SuccessfullRequest>[]>;
+  activeTab:string='details';
 
 
   isLiked: boolean = false;
@@ -78,8 +87,27 @@ export class ProductDetailsComponent implements OnInit, OnDestroy{
     this.selectedSize = size;
   }
 
-  checkProductType(product:Object){
-    return typeof product;
+  getProductField(product:Product){
+    switch(product.category.toUpperCase()){
+      case 'SNEAKERS':
+        return 'SKU: '+(product as Sneakers).sku;
+      case 'CLOTHING':
+        return 'Season: '+(product as Clothing).season;
+      case 'ACCESSORY':
+        return 'Material: '+(product as Accessory).material;
+      case 'COLLECTIBLE':
+        return 'Collection: '+(product as Collectible).collectionName;
+      case 'ELECTRONIC':
+        return 'Handling: '+(product as Electronic).caution;
+      case 'FOOTBALL':
+        return 'Section: '+(product as Football).scope;
+      case 'SKATEBOARD':
+        return 'Length: '+(product as Skateboard).length;
+      case 'MUSIC':
+        return 'Format: '+(product as Music).format;
+      default: 
+      return '';
+    }
   }
 
   ngOnDestroy(): void {

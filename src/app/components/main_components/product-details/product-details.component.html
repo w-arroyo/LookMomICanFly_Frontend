@@ -9,8 +9,6 @@
 
   <ng-container *ngIf="product.active">
     <div class="breadcrumbs">
-      <span class="breadcrumb" (click)="goToHomeScreen()"> PRODUCTS </span>
-      <span class="separator">/</span>
       <span class="breadcrumb"> {{product.category}} </span>
       <span class="separator">/</span>
       <span class="breadcrumb current"> {{product.name.toUpperCase()}}</span>
@@ -36,10 +34,9 @@
 
         <div class="product-manufacturer">{{product.manufacturer.toUpperCase()}}</div>
         <div class="product-year">Released: {{product.releaseYear}}</div>
-        <div class="product-reference">REFERENCE: </div>
-
+        <div class="product-reference">{{ getProductField(product) }}</div>
         <div class="color-options" *ngIf="product.colors && product.colors.length > 0">
-          <label class="color-label">COLORS: </label>
+          <label class="color-label">COLORS: {{product.colors[0]}} / {{product.colors[1]}}</label>
           <div class="color-selection">
             <div *ngFor="let color of product.colors" 
                  class="color-option" 
@@ -51,17 +48,56 @@
 
         <app-post-table [productId]="product.id"></app-post-table>
 
+        <div class="price-info-container" *ngIf="postService.selectedSize$ | async as selectedSize">
+          <div class="price-info-row">
+            <span class="price-info-label">LOWEST ASK:</span>
+            <span class="price-info-value">
+              {{ ((productPostDetails$ | async)?.[0] | async)?.message ? (((productPostDetails$ | async)?.[0] | async)?.message | currency:'EUR':'symbol':'1.2-2') : '-' }}
+            </span>
+          </div>
+          <div class="price-info-row">
+            <span class="price-info-label">HIGHEST BID:</span>
+            <span class="price-info-value">
+              {{ ((productPostDetails$ | async)?.[1] | async)?.message ? (((productPostDetails$ | async)?.[1] | async)?.message | currency:'EUR':'symbol':'1.2-2') : '-' }}
+            </span>
+          </div>
+          <div class="price-info-row">
+            <span class="price-info-label">LAST SALE:</span>
+            <span class="price-info-value">
+              {{ ((productPostDetails$ | async)?.[2] | async)?.message ? (((productPostDetails$ | async)?.[2] | async)?.message | currency:'EUR':'symbol':'1.2-2') : '-' }}
+            </span>
+          </div>
+        </div>
+
         <div class="action-buttons">
           <button class="buy-button">BUY / BID</button>
           <button class="sell-button">SELL / ASK</button>
         </div>
 
         <div class="product-tabs">
-          <button class="tab-button active">Details</button>
-          <button class="tab-button">Measurements</button>
-          <button class="tab-button">Size Guide</button>
-          <button class="tab-button">Need Help?</button>
+          <button class="tab-button" 
+                  [class.active]="activeTab === 'details'"
+                  (click)="activeTab = 'details'">
+            Details
+          </button>
+          <button class="tab-button" 
+                  [class.active]="activeTab === 'help'"
+                  (click)="activeTab = 'help'">
+            Need Help?
+          </button>
         </div>
+        
+        <div class="tab-content">
+          <div *ngIf="activeTab === 'details'" class="tab-pane">
+            <p>All products are garanteed authentic, new, unworn and delivered in its original box.</p>
+          </div>
+          
+          <div *ngIf="activeTab === 'help'" class="tab-pane">
+            <p>For any assistance contact our customer support team at admin_montoya&#64;lookmomicanfly.com.</p>
+          </div>
+        </div>
+
+
       </div>
     </div>
   </ng-container>
