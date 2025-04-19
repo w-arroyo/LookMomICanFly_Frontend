@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, map, catchError, throwError } from 'rxjs';
 import { ProductSummary } from '../../models/product_summary.model';
+import { publicEndpoint } from '../../config/request.interceptor';
 
 @Injectable({
   providedIn: 'root'
@@ -17,27 +18,31 @@ export class ProductSummaryService {
     this.httpClient=httpClient;
   }
 
+  getCategories(): Observable<string[]>{
+    return this.httpClient.get<string[]>(`${this.baseUrl}/categories/`, {context: publicEndpoint()});
+  }
+
   allProducts(){
     this.handleBackendResponse(
-      this.httpClient.get<ProductSummary[]>(`${this.baseUrl}/get/all-summary`)
+      this.httpClient.get<ProductSummary[]>(`${this.baseUrl}/get/all-summary`, {context: publicEndpoint()})
     );
   }
 
   productsByCategory(category:string): void{
     this.handleBackendResponse(
-      this.httpClient.get<ProductSummary[]>(`${this.baseUrl}/get/all-summary-by-category/?category=${category}`)
+      this.httpClient.get<ProductSummary[]>(`${this.baseUrl}/get/all-summary-by-category/?category=${category}`, {context: publicEndpoint()})
     );
   }
 
   productsBySearch(productName: string): void{
     this.handleBackendResponse(
-      this.httpClient.get<ProductSummary[]>(`${this.baseUrl}/find/?name=${productName}`)
+      this.httpClient.get<ProductSummary[]>(`${this.baseUrl}/find/?name=${productName}`, {context: publicEndpoint()})
     );
   }
 
   productsByBestSellers(): void{
     this.handleBackendResponse(
-      this.httpClient.get<ProductSummary[]>(`${this.baseUrl}/best-sellers`)
+      this.httpClient.get<ProductSummary[]>(`${this.baseUrl}/best-sellers`, {context: publicEndpoint()})
     );
   }
 

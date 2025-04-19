@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Sneakers } from '../../models/sneakers.model';
 import { Product } from '../../models/product.model';
+import { publicEndpoint } from '../../config/request.interceptor';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class ProductDetailsService {
   }
 
   loadProductPage(id:string,category:string): Observable<Product>{
-    return this.httpClient.get<Sneakers>(`${this.baseUrl}/${category}/get/?id=${id}`)
+    return this.httpClient.get<Sneakers>(`${this.baseUrl}/${category}/get/?id=${id}`, {context: publicEndpoint()})
   }
 
 }

@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LoginRequestData } from '../../../models/login.model';
 import { UserRegistration } from '../../../models/register.model';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-authentication',
@@ -13,7 +13,7 @@ import { Observable } from 'rxjs';
   templateUrl: './authentication.component.html',
   styleUrl: './authentication.component.css'
 })
-export class AuthenticationComponent implements OnInit {
+export class AuthenticationComponent implements OnInit, OnDestroy {
 
   private authenticationService: AuthenticationService;
   private activatedRoute:ActivatedRoute;
@@ -25,6 +25,7 @@ export class AuthenticationComponent implements OnInit {
   passwordInput!: string;
   errorMessage: string='';
   errorsExist: boolean=false;
+  private destroyStream$:Subject<void>=new Subject<void>();
 
   constructor(authenticationService: AuthenticationService, router:Router,activatedRoute:ActivatedRoute){
     this.authenticationService=authenticationService;
@@ -84,15 +85,25 @@ export class AuthenticationComponent implements OnInit {
   }
 
   private manageObservable(observable:Observable<any>): void{
-    observable.subscribe({
+    observable.pipe(
+      takeUntil(
+        this.destroyStream$
+      )
+    )
+    .subscribe({
       next: (data)=>{
-        this.router.navigate(['/home']);
+        this.router.navigate(['/account/profile']);
       },
       error: (error) =>{
         this.errorsExist=true;
         this.errorMessage=error.message;
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroyStream$.next();
+    this.destroyStream$.complete();
   }
 
 }

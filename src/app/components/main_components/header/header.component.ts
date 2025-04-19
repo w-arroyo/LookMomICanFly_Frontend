@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { catchError, Observable, Subject, takeUntil, throwError } from 'rxjs';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
 import { Router, RouterLinkWithHref } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -36,8 +36,20 @@ export class HeaderComponent implements OnInit{
   }
 
   ngOnInit(): void{
-    this.categories$=this.httpClient.get<string[]>(`http://localhost:8080/api/products/categories/`)
+    //this.categories$=this.httpClient.get<string[]>(`http://localhost:8080/api/products/categories/`)
+    this.getCategories();
     this.isLogged$=this.authenticationService.isLoggedSubject.asObservable();
+  }
+
+  private getCategories(){
+    this.categories$=this.productSummaryService.getCategories().pipe(
+          catchError(
+            (error) =>{
+              const message= error.error?.error || 'Server error.';
+              return throwError(()=>new Error(message));
+            }
+          )
+        );
   }
 
   expandCategories(): void{

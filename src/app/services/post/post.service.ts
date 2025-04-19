@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { SuccessfullRequest } from '../../models/successful_request.model';
+import { publicEndpoint } from '../../config/request.interceptor';
 
 @Injectable({
   providedIn: 'root'
@@ -19,19 +20,19 @@ export class PostService {
   }
 
   findLowestAskByProductIdAndSize(productId:string, size:string): Observable<SuccessfullRequest>{
-    return this.httpClient.get<SuccessfullRequest>(`${this.baseUrl}/asks/lowest-ask/?productId=${productId}&size=${size}`);
+    return this.httpClient.get<SuccessfullRequest>(`${this.baseUrl}/asks/lowest-ask/?productId=${productId}&size=${size}`, {context: publicEndpoint()});
   }
 
   findHighestBidByProductIdAndSize(productId:string, size:string): Observable<SuccessfullRequest>{
-    return this.httpClient.get<SuccessfullRequest>(`${this.baseUrl}/bids/highest-bid/?productId=${productId}&size=${size}`);
+    return this.httpClient.get<SuccessfullRequest>(`${this.baseUrl}/bids/highest-bid/?productId=${productId}&size=${size}`, {context: publicEndpoint()});
   }
 
   getProductSizes(productId:string): Observable<string[]>{
-    return this.httpClient.get<string[]>(`${this.baseUrl}/products/get/sizes/?productId=${productId}`);
+    return this.httpClient.get<string[]>(`${this.baseUrl}/products/get/sizes/?productId=${productId}`, {context: publicEndpoint()});
   }
 
   findProductLastSaleBySize(productId:string, size:string): Observable<SuccessfullRequest>{
-    return this.httpClient.get<SuccessfullRequest>(`${this.baseUrl}/sales/get/last/?productId=${productId}&size=${size}`);
+    return this.httpClient.get<SuccessfullRequest>(`${this.baseUrl}/sales/get/last/?productId=${productId}&size=${size}`, {context: publicEndpoint()});
   }
 
 }

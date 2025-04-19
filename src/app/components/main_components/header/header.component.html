@@ -46,7 +46,7 @@
           <div class="account-dropdown" *ngIf="accountActive">
             
               <div class="dropdown-items" *ngIf="isLogged$ | async; else unlogged">
-                <a class="dropdown-item">PROFILE</a>
+                <a class="dropdown-item" routerLink="/account/profile">PROFILE</a>
                 <a class="dropdown-item" (click)="logout()">LOG OUT</a>
               </div>
             

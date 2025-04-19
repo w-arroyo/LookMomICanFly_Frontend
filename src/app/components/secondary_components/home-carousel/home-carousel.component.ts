@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { RouterLinkWithHref } from '@angular/router';
 
 @Component({
   selector: 'app-home-carousel',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLinkWithHref],
   templateUrl: './home-carousel.component.html',
   styleUrl: './home-carousel.component.css'
 })
