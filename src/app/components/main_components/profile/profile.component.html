@@ -1,40 +1,26 @@
 <div class="profile-container">
-    <div class="profile-menu">
-      <button class="menu-item active" (click)="selectSection('profile')">PROFILE</button>
-      <button class="menu-item" (click)="selectSection('addresses')">ADDRESSES</button>
-      <button class="menu-item" (click)="selectSection('bank-account')">BANK ACCOUNT</button>
-      <button class="menu-item" (click)="selectSection('phone-number')">PHONE NUMBER</button>
-      <button class="menu-item" (click)="selectSection('buying')">BUYING</button>
-      <button class="menu-item" (click)="selectSection('selling')">SELLING</button>
-      <button class="menu-item" (click)="selectSection('update-profile')">UPDATE PROFILE</button>
-      <button class="menu-item logout" (click)="logout()">LOGOUT</button>
-    </div>
-  
-    <div class="profile-content">
-      <div *ngIf="selectedSection === 'profile'" class="profile-info">
-        <h2 class="profile-title">PROFILE</h2>
-        <ng-container *ngIf="profileData$ | async as profileData">
-        <div class="profile-details">
-          <div class="detail-row">
-            <span class="detail-label">Full Name:</span>
-            <span class="detail-value">{{profileData.name}}</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Member Since:</span>
-            <span class="detail-value">{{profileData.registrationDate}}</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Selling Level:</span>
-            <ng-container *ngIf="userLevel$ | async as fee">
-              <span class="detail-value">{{fee.description}} ({{fee.percentage}}%)</span>
-            </ng-container>          
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Email:</span>
-            <span class="detail-value">{{profileData.email}}</span>
-          </div>
-        </div>
-      </ng-container>
-      </div>
-    </div>
+  <div class="profile-menu">
+    <button class="menu-item active" (click)="selectSection('profile')">PROFILE</button>
+    <button class="menu-item" (click)="selectSection('addresses')">ADDRESSES</button>
+    <button class="menu-item" (click)="selectSection('bank-account')">BANK ACCOUNT</button>
+    <button class="menu-item" (click)="selectSection('phone-number')">PHONE NUMBER</button>
+    <button class="menu-item" (click)="selectSection('buying')">BUYING</button>
+    <button class="menu-item" (click)="selectSection('selling')">SELLING</button>
+    <button class="menu-item" (click)="selectSection('update-profile')">UPDATE PROFILE</button>
+    <button class="menu-item logout" (click)="logout()">LOGOUT</button>
   </div>
+
+  <div class="profile-content">
+
+    <app-profile-data 
+      *ngIf="selectedSection === 'profile'"
+      [profileData]="profileData$ | async"
+      [userLevel]="userLevel$ | async">
+    </app-profile-data>
+
+    <app-profile-bank-account
+      *ngIf="selectedSection === 'bank-account'">
+    </app-profile-bank-account>
+
+  </div>
+</div>

@@ -5,6 +5,8 @@ import { UserProfileData } from '../../models/user_profile.model';
 import { SellingFee } from '../../models/selling_fee.model';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { Router } from '@angular/router';
+import { BankAccount } from '../../models/bank_account.model';
+import { SuccessfullRequest } from '../../models/successful_request.model';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +36,22 @@ export class ProfileDataService {
 
   getUserLevel(): Observable<SellingFee>{
     return this.httpClient.get<SellingFee>(`${this.baseUrl}/fees/level/?userId=${this.userId}`);
+  }
+
+  getBankAccount(): Observable<BankAccount | null>{
+    return this.httpClient.get<BankAccount>(`${this.baseUrl}/bank-accounts/user/?userId=${this.userId}`);
+  }
+
+  deleteBankAccount(): Observable<SuccessfullRequest>{
+    return this.httpClient.put<SuccessfullRequest>(`${this.baseUrl}/bank-accounts/deactivate/?user=${this.userId}`, null);
+  }
+
+  saveBankAccount(bankAccountNumber:string){
+    const bankAccount=new BankAccount();
+    bankAccount.number=bankAccountNumber;
+    if(this.userId!=null)
+      bankAccount.userId=this.userId;
+    return this.httpClient.post<BankAccount>(`${this.baseUrl}/bank-accounts/save`, bankAccount);
   }
 
 }
