@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { UserProfileData } from '../../models/user_profile.model';
 import { SellingFee } from '../../models/selling_fee.model';
 import { AuthenticationService } from '../authentication/authentication.service';
@@ -11,6 +11,7 @@ import { PhoneNumberFormat } from '../../models/phone_number_format.model';
 import { publicEndpoint } from '../../config/request.interceptor';
 import { PhoneNumber } from '../../models/phone_number.model';
 import { SavePhoneNumber } from '../../models/save_phone_number.model';
+import { Address } from '../../models/address,model';
 
 @Injectable({
   providedIn: 'root'
@@ -51,7 +52,7 @@ export class ProfileDataService {
   }
 
   getPhonePrefixes(): Observable<PhoneNumberFormat[]>{
-    return this.httpClient.get<PhoneNumberFormat[]>(`${this.baseUrl}/phone-numbers/formats`, {context: publicEndpoint()})
+    return this.httpClient.get<PhoneNumberFormat[]>(`${this.baseUrl}/phone-numbers/formats`, {context: publicEndpoint()});
   }
 
   getPhoneNumber(): Observable<PhoneNumber | null>{
@@ -60,6 +61,33 @@ export class ProfileDataService {
 
   deletePhoneNumber():Observable<SuccessfullRequest>{
     return this.httpClient.put<SuccessfullRequest>(`${this.baseUrl}/phone-numbers/deactivate/?user=${this.userId}`, null);
+  }
+
+  updateEmail(newEmail:string):Observable<SuccessfullRequest>{
+    return this.httpClient.put<SuccessfullRequest>(`${this.baseUrl}/users/changeEmail`,{userId:this.userId, newField:newEmail});
+  }
+
+  updatePassword(oldPassword:string,newPassword:string):Observable<SuccessfullRequest>{
+    return this.httpClient.put<SuccessfullRequest>(`${this.baseUrl}/users/change-password`,{id:this.userId, oldPassword:oldPassword,newPassword:newPassword});
+  }
+
+  deactivateAccount(): Observable<SuccessfullRequest>{
+    return this.httpClient.put<SuccessfullRequest>(`${this.baseUrl}/users/deactivate/?userId=${this.userId}`, null)
+    .pipe(
+      tap(
+        (data)=>{
+          this.authService.logout();
+        }
+      )
+    );
+  }
+
+  getUserAddresses():Observable<Address[]>{
+    return this.httpClient.get<Address[]>(`${this.baseUrl}/users/addresses/?userId=${this.userId}`);
+  }
+
+  saveAddress(){
+
   }
 
   savePhoneNumber(prefix:string,number:string){

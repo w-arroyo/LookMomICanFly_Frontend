@@ -16,6 +16,10 @@
       *ngIf="selectedSection === 'profile'">
     </app-profile-data>
 
+    <app-profile-addresses
+      *ngIf="selectedSection === 'addresses'">
+    </app-profile-addresses>
+
     <app-profile-bank-account
       *ngIf="selectedSection === 'bank-account'">
     </app-profile-bank-account>
@@ -23,6 +27,10 @@
     <app-profile-phone-number
       *ngIf="selectedSection === 'phone-number'">
     </app-profile-phone-number>
+
+    <app-profile-update-data
+      *ngIf="selectedSection === 'update-profile'">
+    </app-profile-update-data>
 
   </div>
 </div>

@@ -20,8 +20,9 @@ export const routes: Routes = [
         loadChildren: ()=> import('./routes/product.routes').then(route=> route.routes)
     },
     {
-        path:'account/:section',
-        component: ProfileComponent,
+        path:'account/profile',
+        //loadChildren: ()=> import('./routes/profile.routes').then(route=> route.routes),
+        component:ProfileComponent,
         canActivate: [AuthGuardService]
     },
     {
