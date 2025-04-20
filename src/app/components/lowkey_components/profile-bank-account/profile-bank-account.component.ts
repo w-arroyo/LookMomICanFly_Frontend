@@ -62,11 +62,11 @@ export class ProfileBankAccountComponent implements OnInit, OnDestroy{
   }
 
   saveAccount() {
-    if (!this.editedAccountNumber || this.editedAccountNumber.trim().length < 5) {
-      this.errorMessage = 'Please enter a valid bank account number';
+    if (!this.editedAccountNumber || this.editedAccountNumber.trim().length < 23) {
+      this.errorMessage = 'Please enter a valid bank account number.';
       return;
     }
-    this.profileDataService.saveBankAccount(this.editedAccountNumber).pipe(
+    this.profileDataService.saveBankAccount(this.editedAccountNumber.trim()).pipe(
       tap({
         next: (data)=>{
           this.isEditing = false;
