@@ -11,7 +11,6 @@ import { PhoneNumberFormat } from '../../models/phone_number_format.model';
 import { publicEndpoint } from '../../config/request.interceptor';
 import { PhoneNumber } from '../../models/phone_number.model';
 import { SavePhoneNumber } from '../../models/save_phone_number.model';
-import { Address } from '../../models/address,model';
 
 @Injectable({
   providedIn: 'root'
@@ -80,14 +79,6 @@ export class ProfileDataService {
         }
       )
     );
-  }
-
-  getUserAddresses():Observable<Address[]>{
-    return this.httpClient.get<Address[]>(`${this.baseUrl}/users/addresses/?userId=${this.userId}`);
-  }
-
-  saveAddress(){
-
   }
 
   savePhoneNumber(prefix:string,number:string){

@@ -38,9 +38,6 @@ export class ProfileUpdateDataComponent implements OnInit,OnDestroy{
 
   getUserData(){
     this.userData$=this.profileDataService.getProfileData().pipe(
-      tap(
-        (data)=> console.log(data)
-      ),
       catchError(
         (error)=>{
           const message=error.error?.error;

@@ -19,14 +19,6 @@ export class PostService {
     this.httpClient=httpClient;
   }
 
-  findLowestAskByProductIdAndSize(productId:string, size:string): Observable<SuccessfullRequest>{
-    return this.httpClient.get<SuccessfullRequest>(`${this.baseUrl}/asks/lowest-ask/?productId=${productId}&size=${size}`, {context: publicEndpoint()});
-  }
-
-  findHighestBidByProductIdAndSize(productId:string, size:string): Observable<SuccessfullRequest>{
-    return this.httpClient.get<SuccessfullRequest>(`${this.baseUrl}/bids/highest-bid/?productId=${productId}&size=${size}`, {context: publicEndpoint()});
-  }
-
   getProductSizes(productId:string): Observable<string[]>{
     return this.httpClient.get<string[]>(`${this.baseUrl}/products/get/sizes/?productId=${productId}`, {context: publicEndpoint()});
   }

@@ -111,7 +111,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy{
     }
   }
 
-  createask(size:string){
+  createAsk(size:string){
     if(this.productId && size)
       this.router.navigate([`/asks/create/product/${this.productId}/size/${size}`]);
   }
