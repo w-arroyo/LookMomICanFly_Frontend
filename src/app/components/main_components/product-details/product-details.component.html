@@ -69,9 +69,9 @@
           </div>
         </div>
 
-        <div class="action-buttons">
+        <div class="action-buttons" *ngIf="postService.selectedSize$ | async as selectedSize">
           <button class="buy-button">BUY / BID</button>
-          <button class="sell-button">SELL / ASK</button>
+          <button class="sell-button" (click)="createAsk(selectedSize)">SELL / ASK</button>
         </div>
 
         <div class="product-tabs">

@@ -32,7 +32,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy{
   private destroyStream:Subject<void>=new Subject<void>();
   productPostDetails$:Observable<Observable<SuccessfullRequest>[]>;
   activeTab:string='details';
-
+  private productId!:string;
 
   isLiked: boolean = false;
   selectedSize: string | null = null;
@@ -56,6 +56,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy{
         const category=params.get('category');
         const productId=params.get('productId');
         if(category && productId){
+          this.productId=productId;
           this.product$=this.productDetailsService.loadProductPage(productId,category).pipe(
             catchError(
               (error)=>{
@@ -108,6 +109,11 @@ export class ProductDetailsComponent implements OnInit, OnDestroy{
       default: 
       return '';
     }
+  }
+
+  createask(size:string){
+    if(this.productId && size)
+      this.router.navigate([`/asks/create/product/${this.productId}/size/${size}`]);
   }
 
   ngOnDestroy(): void {

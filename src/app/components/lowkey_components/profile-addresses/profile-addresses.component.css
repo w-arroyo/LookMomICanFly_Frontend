@@ -3,6 +3,14 @@
   padding: 30px 40px;
   border-radius: 4px;
   margin-top: -10px;
+  max-height: 530px;
+  overflow-y: auto; 
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .profile-title {
