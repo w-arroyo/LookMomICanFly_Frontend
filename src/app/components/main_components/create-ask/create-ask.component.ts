@@ -16,6 +16,11 @@ import { ProfileDataService } from '../../../services/profile/profile-data.servi
 import { SellingFeeService } from '../../../services/selling_fee/selling-fee.service';
 import { SuccessfullRequest } from '../../../models/successful_request.model';
 import { Ask } from '../../../models/ask.model';
+import { Sale } from '../../../models/sale.model';
+import { AskDetails } from '../../../models/full_ask.model';
+import { Transaction } from '../../../models/transaction.model';
+import { TransactionSummary } from '../../../models/transaction_summary.model';
+import { TransactionSuccess } from '../../../models/transaction_completed.model';
 
 @Component({
   selector: 'app-create-ask',
@@ -66,8 +71,7 @@ export class CreateAskComponent implements OnInit, OnDestroy{
       this.formBuilder=formBuilder;
       this.askForm = this.formBuilder.group({
         price: ['', [Validators.required, Validators.min(1), Validators.pattern(/^[0-9]*$/)]], // int positive numbers only
-        address: ['', Validators.required],
-        bankAccount: ['']
+        address: ['', Validators.required]
       });
     }
 
@@ -212,6 +216,14 @@ export class CreateAskComponent implements OnInit, OnDestroy{
       .subscribe({
         next:(data)=>{
           ask.bankAccountId=data?.id ? data.id : '';
+          const address=this.askForm.get('address')?.value;
+          const amount=this.askForm.get('price')?.value;
+          if(this.productId && address && amount && this.size){
+            ask.addressId=address;
+            ask.productId=this.productId;
+            ask.amount=amount;
+            ask.size=this.size;
+          }
           this.postAsk(ask);
         },
         error: (error)=> this.errorMessage=error.error?.error
@@ -226,7 +238,15 @@ export class CreateAskComponent implements OnInit, OnDestroy{
       )
       .subscribe({
         next: (data)=>{
-          
+          let id;
+          if('reference' in data){
+            id=(data as TransactionSuccess).id;
+            this.router.navigate(['sales/'+id]);
+          }
+          else{
+            id=(data as AskDetails).id;
+            this.router.navigate(['asks/'+id]);
+          }
         },
         error: (error)=>{
           this.errorMessage=error.error?.error;

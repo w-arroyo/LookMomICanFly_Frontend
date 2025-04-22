@@ -116,6 +116,13 @@ export class ProductDetailsComponent implements OnInit, OnDestroy{
       this.router.navigate([`/asks/create/product/${this.productId}/size/${size}`]);
   }
 
+  createBid(size:string){
+    if(this.productId && size){
+      this.router.navigate([`/bids/create/product/${this.productId}/size/${size}`]);
+    }
+      
+  }
+
   ngOnDestroy(): void {
     this.destroyStream.next();
     this.destroyStream.complete();

@@ -70,7 +70,7 @@
         </div>
 
         <div class="action-buttons" *ngIf="postService.selectedSize$ | async as selectedSize">
-          <button class="buy-button">BUY / BID</button>
+          <button class="buy-button" (click)="createBid(selectedSize)">BUY / BID</button>
           <button class="sell-button" (click)="createAsk(selectedSize)">SELL / ASK</button>
         </div>
 

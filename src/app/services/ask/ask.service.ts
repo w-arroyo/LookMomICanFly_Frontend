@@ -5,6 +5,8 @@ import { catchError, Observable, throwError } from 'rxjs';
 import { publicEndpoint } from '../../config/request.interceptor';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { Ask } from '../../models/ask.model';
+import { AskDetails } from '../../models/full_ask.model';
+import { TransactionSuccess } from '../../models/transaction_completed.model';
 
 @Injectable({
   providedIn: 'root'
@@ -30,10 +32,14 @@ export class AskService {
     return this.httpClient.get<SuccessfullRequest>(`${this.baseUrl}/lowest-ask/?productId=${productId}&size=${size}`, {context: publicEndpoint()});
   }
 
-  saveAsk(ask:Ask){
+  saveAsk(ask:Ask): Observable<AskDetails | TransactionSuccess>{
     if(this.userId)
       ask.userId=this.userId;
-    return this.httpClient.post<any>(``,ask)
+    return this.httpClient.post<AskDetails | TransactionSuccess>(`${this.baseUrl}/save`,ask)
+  }
+
+  findAsk(askId:string): Observable<AskDetails>{
+    return this.httpClient.get<AskDetails>(`${this.baseUrl}/get/?userId=${this.userId}&askId=${askId}`);
   }
 
 }
