@@ -64,7 +64,7 @@ export class AuthenticationService{
 
   logout(): void{
     this.httpClient.post<AuthenticationSuccess>(`${this.URL}/logout`,null);
-    // IMPROVE PLEASE
+    // NEEDS IMPROVING 
     localStorage.removeItem('jwt_token');
     this.tokenBehaviourSubject.next(null);
     this.isLoggedSubject.next(false);

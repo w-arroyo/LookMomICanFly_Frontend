@@ -36,7 +36,6 @@ export class HeaderComponent implements OnInit{
   }
 
   ngOnInit(): void{
-    //this.categories$=this.httpClient.get<string[]>(`http://localhost:8080/api/products/categories/`)
     this.getCategories();
     this.isLogged$=this.authenticationService.isLoggedSubject.asObservable();
   }

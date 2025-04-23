@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, Type } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductDetailsService } from '../../../services/product_details/product-details.service';
-import { catchError, Observable, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, Subject, takeUntil } from 'rxjs';
 import { Sneakers } from '../../../models/sneakers.model';
 import { PostTableComponent } from '../../secondary_components/post-table/post-table.component';
 import { PostService } from '../../../services/post/post.service';
@@ -15,10 +15,11 @@ import { Electronic } from '../../../models/electronic.model';
 import { Football } from '../../../models/football.model';
 import { Skateboard } from '../../../models/skateboard.model';
 import { Music } from '../../../models/music.model';
+import { LoadingScreenComponent } from '../../lowkey_components/loading-screen/loading-screen.component';
 
 @Component({
   selector: 'app-product-details',
-  imports: [CommonModule, PostTableComponent],
+  imports: [CommonModule, PostTableComponent,LoadingScreenComponent],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.css'
 })
@@ -32,9 +33,11 @@ export class ProductDetailsComponent implements OnInit, OnDestroy{
   private destroyStream:Subject<void>=new Subject<void>();
   productPostDetails$:Observable<Observable<SuccessfullRequest>[]>;
   activeTab:string='details';
+  private productId!:string;
 
+  isLikedBehaviourSubject:BehaviorSubject<boolean>=new BehaviorSubject<boolean>(false);
+  isLiked$:Observable<boolean>=this.isLikedBehaviourSubject.asObservable();
 
-  isLiked: boolean = false;
   selectedSize: string | null = null;
   sizes: string[] = ['XS', 'S', 'M', 'L', 'XL'];
 
@@ -56,6 +59,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy{
         const category=params.get('category');
         const productId=params.get('productId');
         if(category && productId){
+          this.productId=productId;
           this.product$=this.productDetailsService.loadProductPage(productId,category).pipe(
             catchError(
               (error)=>{
@@ -65,10 +69,44 @@ export class ProductDetailsComponent implements OnInit, OnDestroy{
               }
             )
           );
+          this.checkIfLiked();
         }
         else this.goToHomeScreen();
       }
     );
+  }
+
+  private checkIfLiked(){
+    this.productDetailsService.checkIfUserLikesAProduct(this.productId).pipe(
+      takeUntil(
+        this.destroyStream
+      )
+    )
+    .subscribe({
+      next: (data)=>{
+        this.isLikedBehaviourSubject.next(data.status);
+      },
+      error:(error)=>{
+        console.log(error.error?.error);
+        this.isLikedBehaviourSubject.next(false);
+      }
+    });
+  }
+
+  private handleLikingRequest(observable:Observable<SuccessfullRequest>,boolean:boolean){
+    return observable.pipe(
+      takeUntil(
+        this.destroyStream
+      )
+    )
+    .subscribe({
+      next: (data)=>{
+        this.isLikedBehaviourSubject.next(boolean);
+      },
+      error:(error)=>{
+        console.log(error.error?.error);
+      }
+    })
   }
 
   goToHomeScreen(): void{
@@ -80,7 +118,15 @@ export class ProductDetailsComponent implements OnInit, OnDestroy{
   }
 
   toggleLike(): void {
-    this.isLiked = !this.isLiked;
+    if(this.productDetailsService.userId){
+      if(this.isLikedBehaviourSubject.value)
+        this.handleLikingRequest(
+          this.productDetailsService.unlikeAProduct(this.productId),false
+        );
+        else this.handleLikingRequest(
+          this.productDetailsService.likeAProduct(this.productId),true
+        );
+    }
   }
 
   selectSize(size: string): void {
@@ -108,6 +154,18 @@ export class ProductDetailsComponent implements OnInit, OnDestroy{
       default: 
       return '';
     }
+  }
+
+  createAsk(size:string){
+    if(this.productId && size)
+      this.router.navigate([`/asks/create/product/${this.productId}/size/${size}`]);
+  }
+
+  createBid(size:string){
+    if(this.productId && size){
+      this.router.navigate([`/bids/create/product/${this.productId}/size/${size}`]);
+    }
+      
   }
 
   ngOnDestroy(): void {

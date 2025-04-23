@@ -1,65 +1,37 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { catchError, Observable, throwError } from 'rxjs';
-import { UserProfileData } from '../../../models/user_profile.model';
-import { SellingFee } from '../../../models/selling_fee.model';
-import { ProfileDataService } from '../../../services/profile/profile-data.service';
-import { DateFormatter } from '../../../utils/date_parser';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ProfileDataComponent } from '../../lowkey_components/profile-data/profile-data.component';
+import { ProfileBankAccountComponent } from '../../lowkey_components/profile-bank-account/profile-bank-account.component';
+import { ProfilePhoneNumberComponent } from '../../lowkey_components/profile-phone-number/profile-phone-number.component';
+import { ProfileUpdateDataComponent } from '../../lowkey_components/profile-update-data/profile-update-data.component';
+import { ProfileAddressesComponent } from '../../lowkey_components/profile-addresses/profile-addresses.component';
+import { Router, RouterOutlet, RouterLinkWithHref } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule],
+  imports: [CommonModule, ProfileDataComponent, ProfileBankAccountComponent, ProfilePhoneNumberComponent,ProfileUpdateDataComponent,ProfileAddressesComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy{
 
-  private profileService:ProfileDataService;
+  private router:Router;
   selectedSection: string = 'profile';
-  profileData$!:Observable<UserProfileData>;
-  userLevel$!:Observable<SellingFee>;
-  user: any = {
-    name: 'Álvaro Arroyo',
-    creationDate: new Date('2023-01-15'),
-    level: 'Premium',
-    email: 'wdomaroyo@gmail.com'
-  };
 
-  constructor(profileService:ProfileDataService) {
-    this.profileService=profileService;
+  constructor(router:Router) {
+    this.router=router;
   }
 
   ngOnInit(): void {
-    this.getUserData();
-    this.getUserLevel();
+    
+  }
+
+  ngOnDestroy(): void {
+    
   }
 
   selectSection(section: string): void {
     this.selectedSection = section;
-  }
-
-  private getUserData(){
-    this.profileData$=this.profileService.getProfileData().pipe(
-      catchError(
-        (error)=>{
-          const message=error.error?.error;
-          console.log(message);
-          return throwError(()=>new Error(message));
-        }
-      )
-    );
-  }
-
-  private getUserLevel(){
-    this.userLevel$=this.profileService.getUserLevel().pipe(
-      catchError(
-        (error)=>{
-          const message=error.error?.error;
-          console.log(message);
-          return throwError(()=>new Error(message));
-        }
-      )
-    );
   }
 
   logout(): void {

@@ -3,6 +3,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { catchError, Observable, shareReplay, throwError } from 'rxjs';
 import { PostService } from '../../../services/post/post.service';
 import { SuccessfullRequest } from '../../../models/successful_request.model';
+import { AskService } from '../../../services/ask/ask.service';
+import { BidService } from '../../../services/bid/bid.service';
 
 @Component({
   selector: 'app-post-table',
@@ -13,6 +15,8 @@ import { SuccessfullRequest } from '../../../models/successful_request.model';
 export class PostTableComponent implements OnInit{
 
   postService:PostService;
+  private askService:AskService;
+  private bidService:BidService;
   private bidsCache:{[size:string]:Observable<SuccessfullRequest>}={};
   private asksCache:{[size:string]:Observable<SuccessfullRequest>}={};
   private salesCache:{[size:string]:Observable<SuccessfullRequest>}={};
@@ -22,8 +26,10 @@ export class PostTableComponent implements OnInit{
 
   selectedSize: string | null = null;
 
-  constructor(postService:PostService){
+  constructor(postService:PostService,askService:AskService,bidService:BidService){
     this.postService=postService;
+    this.askService=askService;
+    this.bidService=bidService;
   }
 
   ngOnInit(): void {
@@ -39,7 +45,7 @@ export class PostTableComponent implements OnInit{
 
   getAsk(size:string): Observable<SuccessfullRequest>{
     if(!this.asksCache[size]){
-      this.asksCache[size]=this.postService.findLowestAskByProductIdAndSize(this.productId,size)
+      this.asksCache[size]=this.askService.findLowestAskByProductIdAndSize(this.productId,size)
       .pipe(
         shareReplay(1)
       )
@@ -49,7 +55,7 @@ export class PostTableComponent implements OnInit{
 
   getBid(size:string): Observable<SuccessfullRequest>{
     if(!this.bidsCache[size]){
-      this.bidsCache[size]=this.postService.findHighestBidByProductIdAndSize(this.productId,size)
+      this.bidsCache[size]=this.bidService.findHighestBidByProductIdAndSize(this.productId,size)
       .pipe(
         shareReplay(1)
       )

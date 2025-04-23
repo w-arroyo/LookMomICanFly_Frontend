@@ -7,10 +7,11 @@ import { ProductSummary } from '../../../models/product_summary.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FilterProductsComponent } from '../../secondary_components/filter-products/filter-products.component';
 import { FilterProductsService } from '../../../services/filter_products/filter-products.service';
+import { LoadingScreenComponent } from '../../lowkey_components/loading-screen/loading-screen.component';
 
 @Component({
   selector: 'app-product-summary-list',
-  imports: [CommonModule, ProductSummaryDetailsComponent, FilterProductsComponent],
+  imports: [CommonModule, ProductSummaryDetailsComponent, FilterProductsComponent, LoadingScreenComponent],
   templateUrl: './product-summary-list.component.html',
   styleUrl: './product-summary-list.component.css'
 })

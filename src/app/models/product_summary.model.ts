@@ -4,7 +4,7 @@ export class ProductSummary{
     name!: string;
     year!: number;
     manufacturer!: string;
-    private category!: string;
+    category!: string;
 
     getId(): string {
         return this.id;

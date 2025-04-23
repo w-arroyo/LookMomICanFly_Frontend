@@ -4,5 +4,6 @@ export class SellingFee{
     description!:string;
     percentage!:number;
     byDefault!:boolean;
+    shippingCost!:number;
 
 }
