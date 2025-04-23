@@ -21,8 +21,8 @@
       
             <div class="fees-section">
               <div class="breakdown-row">
-                <span>Operating Fee ({{bidDetails.operatingFee}}%)</span>
-                <span>{{(bidDetails.amount * (bidDetails.operatingFee / 100)) | currency:'EUR':'symbol':'1.2-2'}}</span>
+                <span>Operating Fee</span>
+                <span>{{bidDetails.operatingFee | currency:'EUR':'symbol':'1.2-2'}}</span>
               </div>
               <div class="breakdown-row">
                 <span>Shipping Option</span>

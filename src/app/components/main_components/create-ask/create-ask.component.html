@@ -86,7 +86,7 @@
           <button type="submit" 
                   [disabled]="askForm.invalid || !(data.addresses && data.addresses.length) || totalPayout <= 0" 
                   class="create-button">
-            Create Ask
+            {{buttonMessage}}
           </button>
         </div>
 
@@ -99,7 +99,6 @@
 </div>
 
 <ng-template #loadingTemplate>
-  <div class="loading-spinner">
-    Loading...
-  </div>
+  <app-loading-screen>
+  </app-loading-screen>
 </ng-template>

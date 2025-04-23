@@ -52,7 +52,6 @@ export class OrderDetailsComponent implements OnInit{
   }
 
   calculateTotalCost(amount:number,feePercentage:number,shippingCost: number):number {
-    const feeAmount=amount*(feePercentage/100);
-    return amount+feeAmount+shippingCost;
+    return amount+feePercentage+shippingCost;
   }
 }

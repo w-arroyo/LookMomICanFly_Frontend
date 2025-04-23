@@ -16,15 +16,13 @@ import { ProfileDataService } from '../../../services/profile/profile-data.servi
 import { SellingFeeService } from '../../../services/selling_fee/selling-fee.service';
 import { SuccessfullRequest } from '../../../models/successful_request.model';
 import { Ask } from '../../../models/ask.model';
-import { Sale } from '../../../models/sale.model';
 import { AskDetails } from '../../../models/full_ask.model';
-import { Transaction } from '../../../models/transaction.model';
-import { TransactionSummary } from '../../../models/transaction_summary.model';
 import { TransactionSuccess } from '../../../models/transaction_completed.model';
+import { LoadingScreenComponent } from '../../lowkey_components/loading-screen/loading-screen.component';
 
 @Component({
   selector: 'app-create-ask',
-  imports: [CommonModule,FormsModule, ReactiveFormsModule],
+  imports: [CommonModule,FormsModule, ReactiveFormsModule,LoadingScreenComponent],
   templateUrl: './create-ask.component.html',
   styleUrl: './create-ask.component.css'
 })
@@ -58,6 +56,7 @@ export class CreateAskComponent implements OnInit, OnDestroy{
     askForm: FormGroup;
     errorMessage: string | null = null;
     totalPayout: number = 0;
+    buttonMessage:string='Place Ask'
 
     constructor(askService:AskService,bidService:BidService,formBuilder:FormBuilder,productService:ProductDetailsService,router:Router,activatedRoute:ActivatedRoute,addressService:AddressService,profileService:ProfileDataService,sellingFeeService:SellingFeeService){
       this.askService=askService;
@@ -207,6 +206,7 @@ export class CreateAskComponent implements OnInit, OnDestroy{
         this.errorMessage = 'Please fill all fields correctly.';
         return;
       }
+      this.buttonMessage='Placing Ask...'
       const ask=new Ask();
       this.bankAccount$.pipe(
         takeUntil(
@@ -226,7 +226,10 @@ export class CreateAskComponent implements OnInit, OnDestroy{
           }
           this.postAsk(ask);
         },
-        error: (error)=> this.errorMessage=error.error?.error
+        error: (error)=> {
+          this.errorMessage=error.error?.error
+          this.buttonMessage='Place Ask';
+        }
       })
     }
 

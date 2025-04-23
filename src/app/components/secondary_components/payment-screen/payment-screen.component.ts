@@ -170,7 +170,10 @@ export class PaymentScreenComponent implements OnInit, OnDestroy, AfterViewInit{
         }
       },
       error:(error)=>{
-        this.errorMessage = error.error?.error;
+        const message:string=error.error?.error;
+        if(message.includes("declined"))
+          this.errorMessage='Your card was declined. Try again with another one.';
+        else this.errorMessage=message;
       }
     });
   
