@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { ShippingOption } from '../models/shipping_option.model';
 import { Observable } from 'rxjs';
 import { publicEndpoint } from '../config/request.interceptor';
+import { SuccessfullRequest } from '../models/successful_request.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,13 +11,18 @@ import { publicEndpoint } from '../config/request.interceptor';
 export class ShippingOptionService {
 
   private httpClient:HttpClient;
+  private baseUrl='http://localhost:8080/api/shipping-options';
 
   constructor(httpClient:HttpClient) {
     this.httpClient=httpClient;
   }
 
   getShippingOptions(): Observable<ShippingOption[]>{
-    return this.httpClient.get<ShippingOption[]>(`http://localhost:8080/api/shipping-options/get-all`, {context: publicEndpoint()});
+    return this.httpClient.get<ShippingOption[]>(`${this.baseUrl}/get-all`, {context: publicEndpoint()});
+  }
+
+  getShippingPrice(id:string): Observable<SuccessfullRequest>{
+    return this.httpClient.get<SuccessfullRequest>(`${this.baseUrl}/get-price/?id=${id}`, {context: publicEndpoint()});
   }
 
 }

@@ -15,6 +15,7 @@ import { Address } from '../../../models/address,model';
 import { ShippingOption } from '../../../models/shipping_option.model';
 import { ShippingOptionService } from '../../../services/shipping-option.service';
 import { AskService } from '../../../services/ask/ask.service';
+import { PaymentService } from '../../../services/payment/payment.service';
 
 @Component({
   selector: 'app-create-bid',
@@ -28,6 +29,7 @@ export class CreateBidComponent implements OnInit, OnDestroy{
   private productService: ProductDetailsService;
   private addressService: AddressService;
   private shippingOptionService: ShippingOptionService;
+  private paymentService:PaymentService;
 
   private router: Router;
   private activatedRoute: ActivatedRoute;
@@ -49,7 +51,7 @@ export class CreateBidComponent implements OnInit, OnDestroy{
   errorMessage: string | null = null;
   totalAmount: number = 0;
 
-  constructor(bidService: BidService,askService:AskService,formBuilder: FormBuilder,productService: ProductDetailsService,router: Router,activatedRoute: ActivatedRoute,addressService: AddressService,shippingOptionService: ShippingOptionService){
+  constructor(bidService: BidService,askService:AskService,paymentService:PaymentService,formBuilder: FormBuilder,productService: ProductDetailsService,router: Router,activatedRoute: ActivatedRoute,addressService: AddressService,shippingOptionService: ShippingOptionService){
     this.bidService = bidService;
     this.productService = productService;
     this.router = router;
@@ -58,23 +60,22 @@ export class CreateBidComponent implements OnInit, OnDestroy{
     this.askService=askService;
     this.shippingOptionService = shippingOptionService;
     this.formBuilder = formBuilder;
+    this.paymentService=paymentService;
     this.bidForm = this.formBuilder.group({
       amount: ['', [Validators.required, Validators.min(1), Validators.pattern(/^[0-9]*$/)]], // int positive numbers only
       address: ['', Validators.required],
       shippingOption: ['', Validators.required],
-      shippingPrice: [0]
+      shippingPrice: [0, Validators.required]
     });
   }
 
   ngOnInit(): void {
     this.productId = this.activatedRoute.snapshot.paramMap.get('productId');
     this.size = this.activatedRoute.snapshot.paramMap.get('size');
-    
-    if (!this.size || !this.productId) {
+    if(!this.size || !this.productId) {
       this.router.navigate(['home']);
       return;
     }
-
     this.getProduct();
     this.getAddresses();
     this.getShippingOptions();
@@ -85,7 +86,7 @@ export class CreateBidComponent implements OnInit, OnDestroy{
     this.bidForm.get('amount')?.valueChanges.pipe(
       takeUntil(this.destroyStream)
     ).subscribe(amount => {
-      if (amount) {
+      if(amount){
         this.calculateTotalAmount();
       }
     });
@@ -161,7 +162,9 @@ export class CreateBidComponent implements OnInit, OnDestroy{
 
   calculateTotalAmount(): void {
     this.operationalFee$.pipe(
-      takeUntil(this.destroyStream)
+      takeUntil(
+        this.destroyStream
+      )
     ).subscribe(fee => {
       const operationalFee = parseFloat(fee.message) || 0;
       const amount=this.bidForm.get('amount')?.value|| 0;
@@ -178,9 +181,8 @@ export class CreateBidComponent implements OnInit, OnDestroy{
 
   adjustAmountToLowestAsk(lowestAsk: string): void {
     const lowestAskValue = Math.round(parseInt(lowestAsk) || 0);
-    const currentAmount = Math.round(this.bidForm.get('amount')?.value || 0);
-    
-    if (currentAmount > lowestAskValue && lowestAskValue > 0) {
+    const currentAmount = Math.round(this.bidForm.get('amount')?.value || 0);   
+    if(currentAmount > lowestAskValue && lowestAskValue > 0) {
       this.bidForm.get('amount')?.setValue(lowestAskValue);
     }
   }
@@ -200,33 +202,20 @@ export class CreateBidComponent implements OnInit, OnDestroy{
       bid.productId = this.productId;
       bid.amount = amount;
       bid.size = this.size;
-      this.postBid(bid);
+      this.goToPayment(bid);
     }
 
   }
 
-  private postBid(bid:Bid) {
-    this.bidService.saveBid(bid).pipe(
-      takeUntil(this.destroyStream)
-    ).subscribe({
-      next: (data) => {
-        let id;
-        if ('reference' in data) {
-          id = (data as TransactionSuccess).id;
-          this.router.navigate(['orders/'+id]);
-        } else {
-          id = (data as BidDetails).id;
-          this.router.navigate(['bids/'+id]);
-        }
-      },
-      error: (error) => {
-        this.errorMessage = error.error?.error;
-      }
-    });
+  private goToPayment(bid:Bid){
+    this.paymentService.bid=bid;
+    this.paymentService.totalAmount=this.totalAmount;
+    this.router.navigate(['payment'])
   }
 
   ngOnDestroy(): void {
     this.destroyStream.next();
     this.destroyStream.complete();
   }
+
 }

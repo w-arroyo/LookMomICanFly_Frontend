@@ -16,7 +16,7 @@ export class BidService {
   private httpClient: HttpClient;
   private baseUrl:string='http://localhost:8080/api/bids/';
   private authenticationService:AuthenticationService;
-  private userId:string='';
+  userId:string='';
 
   constructor(httpClient: HttpClient,authenticationService:AuthenticationService) {
     this.httpClient=httpClient;
@@ -37,7 +37,11 @@ export class BidService {
 
   saveBid(bid:Bid):Observable<BidDetails | TransactionSuccess>{
     bid.userId=this.userId;
-    return this.httpClient.post<BidDetails | TransactionSuccess>(`${this.baseUrl}/save`, bid);
+    return this.httpClient.post<BidDetails | TransactionSuccess>(`${this.baseUrl}save`, bid);
+  }
+
+  findBid(bidId:string):Observable<BidDetails>{
+    return this.httpClient.get<BidDetails>(`${this.baseUrl}get/?bidId=${bidId}&userId=${this.userId}`);
   }
 
 }

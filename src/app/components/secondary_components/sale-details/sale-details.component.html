@@ -17,6 +17,10 @@
               <span>Sale Price:</span>
               <span class="price-value">{{saleDetails.amount}}€</span>
             </div>
+            <div *ngIf="saleDetails.reference" class="price-info-row">
+              <span>Reference:</span>
+              <span>{{saleDetails.reference}}</span>
+            </div>
             <div class="price-info-row">
               <span>Status:</span>
               <span class="status-value">{{saleDetails.status.status}}</span>
@@ -59,16 +63,8 @@
           <div class="product-info">
             <h3>Product Details</h3>
             <div class="info-row">
-              <span>Reference:</span>
-              <span>{{saleDetails.reference}}</span>
-            </div>
-            <div class="info-row">
               <span>Size:</span>
               <span>{{saleDetails.size}}</span>
-            </div>
-            <div class="info-row">
-              <span>Year:</span>
-              <span>{{saleDetails.product.releaseYear}}</span>
             </div>
             <div class="info-row">
               <span>Manufacturer:</span>

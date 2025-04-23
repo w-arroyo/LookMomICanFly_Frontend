@@ -5,6 +5,8 @@ import { AuthGuardService } from './services/guards/auth-guard.service';
 import { CreateAskComponent } from './components/main_components/create-ask/create-ask.component';
 import { AskDetailsComponent } from './components/secondary_components/ask-details/ask-details.component';
 import { SaleDetailsComponent } from './components/secondary_components/sale-details/sale-details.component';
+import { PaymentScreenComponent } from './components/secondary_components/payment-screen/payment-screen.component';
+import { OrderDetailsComponent } from './components/secondary_components/order-details/order-details.component';
 
 export const routes: Routes = [
     {
@@ -42,6 +44,16 @@ export const routes: Routes = [
         path:'sales/:saleId',
         component:SaleDetailsComponent,
         canActivate: [AuthGuardService]
+    },
+    {
+        path:'orders/:orderId',
+        component:OrderDetailsComponent,
+        canActivate:[AuthGuardService]
+    },
+    {
+        path:'payment',
+        component:PaymentScreenComponent,
+        canActivate:[AuthGuardService]
     },
     {
         path:'**', redirectTo:'home'
