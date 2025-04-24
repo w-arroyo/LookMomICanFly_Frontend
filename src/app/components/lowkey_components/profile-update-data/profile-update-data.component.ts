@@ -108,6 +108,7 @@ export class ProfileUpdateDataComponent implements OnInit,OnDestroy{
           this.currentPassword='';
           this.newPassword='';
           this.errorMessage=data.message;
+          console.log(data)
         },
         error: (error)=>{
           const message=error.error?.error;

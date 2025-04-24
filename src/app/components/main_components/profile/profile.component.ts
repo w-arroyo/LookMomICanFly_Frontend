@@ -1,42 +1,36 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ProfileDataComponent } from '../../lowkey_components/profile-data/profile-data.component';
-import { ProfileBankAccountComponent } from '../../lowkey_components/profile-bank-account/profile-bank-account.component';
-import { ProfilePhoneNumberComponent } from '../../lowkey_components/profile-phone-number/profile-phone-number.component';
-import { ProfileUpdateDataComponent } from '../../lowkey_components/profile-update-data/profile-update-data.component';
-import { ProfileAddressesComponent } from '../../lowkey_components/profile-addresses/profile-addresses.component';
 import { Router, RouterOutlet, RouterLinkWithHref } from '@angular/router';
+import { AuthenticationService } from '../../../services/authentication/authentication.service';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule, ProfileDataComponent, ProfileBankAccountComponent, ProfilePhoneNumberComponent,ProfileUpdateDataComponent,ProfileAddressesComponent],
+  imports: [CommonModule, RouterOutlet, RouterLinkWithHref],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
-export class ProfileComponent implements OnInit, OnDestroy{
+export class ProfileComponent{
 
   private router:Router;
+  private auhenticationService:AuthenticationService;
   selectedSection: string = 'profile';
 
-  constructor(router:Router) {
+  constructor(router:Router,auhenticationService:AuthenticationService) {
     this.router=router;
+    this.auhenticationService=auhenticationService;
   }
 
-  ngOnInit(): void {
-    
-  }
-
-  ngOnDestroy(): void {
-    
-  }
-
-  selectSection(section: string): void {
+  selectSection(section:string):void {
     this.selectedSection = section;
   }
 
-  logout(): void {
-    // Implementar lógica de logout aquí
-    console.log('User logged out');
+  isActive(section:string): boolean{
+    return this.selectedSection===section;
+  }
+
+  logout():void{
+    this.auhenticationService.logout();
+    this.router.navigate(['home']);
   }
 }
 

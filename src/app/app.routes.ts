@@ -26,7 +26,7 @@ export const routes: Routes = [
     },
     {
         path:'account/profile',
-        //loadChildren: ()=> import('./routes/profile.routes').then(route=> route.routes),
+        loadChildren: ()=> import('./routes/profile.routes').then(route=> route.routes),
         component:ProfileComponent,
         canActivate: [AuthGuardService]
     },

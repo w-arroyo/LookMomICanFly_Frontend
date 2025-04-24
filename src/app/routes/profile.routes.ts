@@ -1,16 +1,35 @@
 import { Routes } from "@angular/router"
 import { ProfileComponent } from "../components/main_components/profile/profile.component"
+import { ProfileDataComponent } from "../components/lowkey_components/profile-data/profile-data.component"
+import { ProfileAddressesComponent } from "../components/lowkey_components/profile-addresses/profile-addresses.component"
+import { ProfileBankAccountComponent } from "../components/lowkey_components/profile-bank-account/profile-bank-account.component"
+import { ProfilePhoneNumberComponent } from "../components/lowkey_components/profile-phone-number/profile-phone-number.component"
+import { ProfileUpdateDataComponent } from "../components/lowkey_components/profile-update-data/profile-update-data.component"
 
 export const routes:Routes=[
     {
-        path:'', redirectTo: 'profile'
+        path:'',
+        redirectTo: 'my-profile',
+        pathMatch: 'full'
     },
     {
-        path:':section',
-        component:ProfileComponent
+        path:'my-profile',
+        component:ProfileDataComponent
     },
     {
-        path:'addresses/add',
-        component:ProfileComponent
+        path:'addresses',
+        component:ProfileAddressesComponent
+    },
+    {
+        path:'bank-account',
+        component:ProfileBankAccountComponent
+    },
+    {
+        path:'phone-number',
+        component:ProfilePhoneNumberComponent
+    },
+    {
+        path:'update',
+        component:ProfileUpdateDataComponent
     }
 ]

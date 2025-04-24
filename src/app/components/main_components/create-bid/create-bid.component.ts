@@ -1,8 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Bid } from '../../../models/bid.model';
 import { catchError, Observable, Subject, takeUntil, throwError } from 'rxjs';
-import { TransactionSuccess } from '../../../models/transaction_completed.model';
-import { BidDetails } from '../../../models/full_bid.model';
 import { BidService } from '../../../services/bid/bid.service';
 import { ProductDetailsService } from '../../../services/product_details/product-details.service';
 import { AddressService } from '../../../services/address/address.service';
@@ -13,7 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Address } from '../../../models/address,model';
 import { ShippingOption } from '../../../models/shipping_option.model';
-import { ShippingOptionService } from '../../../services/shipping-option.service';
+import { ShippingOptionService } from '../../../services/shipping_option/shipping-option.service';
 import { AskService } from '../../../services/ask/ask.service';
 import { PaymentService } from '../../../services/payment/payment.service';
 

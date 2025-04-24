@@ -1,36 +1,29 @@
 <div class="profile-container">
   <div class="profile-menu">
-    <button class="menu-item active" (click)="selectSection('profile')">PROFILE</button>
-    <button class="menu-item" (click)="selectSection('addresses')">ADDRESSES</button>
-    <button class="menu-item" (click)="selectSection('bank-account')">BANK ACCOUNT</button>
-    <button class="menu-item" (click)="selectSection('phone-number')">PHONE NUMBER</button>
-    <button class="menu-item" (click)="selectSection('buying')">BUYING</button>
-    <button class="menu-item" (click)="selectSection('selling')">SELLING</button>
-    <button class="menu-item" (click)="selectSection('update-profile')">UPDATE PROFILE</button>
+    <button class="menu-item" 
+            [class.active]="isActive('profile')" 
+            [routerLink]="['my-profile']"
+            (click)="selectSection('profile')">PROFILE</button>
+    <button class="menu-item" 
+            [class.active]="isActive('addresses')" 
+            [routerLink]="['addresses']"
+            (click)="selectSection('addresses')">ADDRESSES</button>
+    <button class="menu-item" 
+            [class.active]="isActive('bank-account')" 
+            [routerLink]="['bank-account']"
+            (click)="selectSection('bank-account')">BANK ACCOUNT</button>
+    <button class="menu-item" 
+            [class.active]="isActive('phone-number')" 
+            [routerLink]="['phone-number']"
+            (click)="selectSection('phone-number')">PHONE NUMBER</button>
+    <button class="menu-item" 
+            [class.active]="isActive('update')" 
+            [routerLink]="['update']"
+            (click)="selectSection('update')">UPDATE PROFILE</button>
     <button class="menu-item logout" (click)="logout()">LOGOUT</button>
   </div>
 
   <div class="profile-content">
-
-    <app-profile-data 
-      *ngIf="selectedSection === 'profile'">
-    </app-profile-data>
-
-    <app-profile-addresses
-      *ngIf="selectedSection === 'addresses'">
-    </app-profile-addresses>
-
-    <app-profile-bank-account
-      *ngIf="selectedSection === 'bank-account'">
-    </app-profile-bank-account>
-
-    <app-profile-phone-number
-      *ngIf="selectedSection === 'phone-number'">
-    </app-profile-phone-number>
-
-    <app-profile-update-data
-      *ngIf="selectedSection === 'update-profile'">
-    </app-profile-update-data>
-
+    <router-outlet></router-outlet>
   </div>
 </div>
