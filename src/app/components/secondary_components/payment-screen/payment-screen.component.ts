@@ -11,7 +11,7 @@ import { BidDetails } from '../../../models/full_bid.model';
 import { ProductDetailsService } from '../../../services/product_details/product-details.service';
 import { ProductSummary } from '../../../models/product_summary.model';
 import { SuccessfullRequest } from '../../../models/successful_request.model';
-import { ShippingOptionService } from '../../../services/shipping-option.service';
+import { ShippingOptionService } from '../../../services/shipping_option/shipping-option.service';
 
 @Component({
   selector: 'app-payment-screen',

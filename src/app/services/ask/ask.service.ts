@@ -7,6 +7,7 @@ import { AuthenticationService } from '../authentication/authentication.service'
 import { Ask } from '../../models/ask.model';
 import { AskDetails } from '../../models/full_ask.model';
 import { TransactionSuccess } from '../../models/transaction_completed.model';
+import { PostSummary } from '../../models/post_summary.model';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +41,10 @@ export class AskService {
 
   findAsk(askId:string): Observable<AskDetails>{
     return this.httpClient.get<AskDetails>(`${this.baseUrl}/get/?userId=${this.userId}&askId=${askId}`);
+  }
+
+  findAll():Observable<PostSummary[]>{
+    return this.httpClient.get<PostSummary[]>(`${this.baseUrl}/get-all/?userId=${this.userId}`);
   }
 
 }
