@@ -1,11 +1,10 @@
 import { ProductSummary } from "./product_summary.model";
 
-export class TransactionSummary{
+export class PostSummary{
 
     id!:string;
-    product!:ProductSummary;
     size!:string;
-    status!:string;
     amount!:number;
-
+    product!:ProductSummary;
+    
 }

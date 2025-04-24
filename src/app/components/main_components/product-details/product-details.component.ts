@@ -39,7 +39,6 @@ export class ProductDetailsComponent implements OnInit, OnDestroy{
   isLiked$:Observable<boolean>=this.isLikedBehaviourSubject.asObservable();
 
   selectedSize: string | null = null;
-  sizes: string[] = ['XS', 'S', 'M', 'L', 'XL'];
 
   constructor(router:Router,productDetailsService:ProductDetailsService,activatedRoute:ActivatedRoute,postService:PostService){
     this.router=router;

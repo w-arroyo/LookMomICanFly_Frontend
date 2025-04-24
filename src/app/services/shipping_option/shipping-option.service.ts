@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ShippingOption } from '../models/shipping_option.model';
+import { ShippingOption } from '../../models/shipping_option.model';
 import { Observable } from 'rxjs';
-import { publicEndpoint } from '../config/request.interceptor';
-import { SuccessfullRequest } from '../models/successful_request.model';
+import { publicEndpoint } from '../../config/request.interceptor';
+import { SuccessfullRequest } from '../../models/successful_request.model';
 
 @Injectable({
   providedIn: 'root'
