@@ -1,21 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { TransactionBoxSummaryComponent } from '../../lowkey_components/transaction-box-summary/transaction-box-summary.component';
-import { ProductSummaryService } from '../../../services/product_summary/product-summary.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { TransactionSummary } from '../../../models/transaction_summary.model';
 import { TransactionService } from '../../../services/transaction/transaction.service';
 import { SaleService } from '../../../services/sale/sale.service';
 import { OrderService } from '../../../services/order/order.service';
 import { catchError, Observable, Subject, takeUntil, throwError } from 'rxjs';
-import { TransactionSummary } from '../../../models/transaction_summary.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TransactionBoxSummaryComponent } from '../../lowkey_components/transaction-box-summary/transaction-box-summary.component';
 
 @Component({
-  selector: 'app-transaction-list',
-  imports: [CommonModule, TransactionBoxSummaryComponent],
-  templateUrl: './transaction-list.component.html',
-  styleUrl: './transaction-list.component.css'
+  selector: 'app-completed-transaction-list',
+  imports: [CommonModule,TransactionBoxSummaryComponent],
+  templateUrl: './completed-transaction-list.component.html',
+  styleUrl: './completed-transaction-list.component.css'
 })
-export class TransactionListComponent implements OnInit, OnDestroy{
+export class CompletedTransactionListComponent implements OnInit,OnDestroy{
 
   private transactionService:TransactionService;
   private saleService:SaleService;
@@ -23,8 +22,6 @@ export class TransactionListComponent implements OnInit, OnDestroy{
 
   transactions$!:Observable<TransactionSummary[]>;
   private destroyStream:Subject<void>=new Subject<void>();
-
-  type:string = 'pending'
 
   sectionParam:string='';
   private router:Router;
@@ -35,7 +32,7 @@ export class TransactionListComponent implements OnInit, OnDestroy{
     this.saleService=saleService;
     this.orderService=orderService;
     this.router=router;
-    this.activatedRoute=activatedRoute;  
+    this.activatedRoute=activatedRoute;
   }
 
   ngOnInit(): void {

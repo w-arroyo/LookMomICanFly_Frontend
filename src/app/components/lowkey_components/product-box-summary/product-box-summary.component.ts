@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { ProductSummary } from '../../../models/product_summary.model';
 
 @Component({
   selector: 'app-product-box-summary',
@@ -7,5 +8,11 @@ import { Component } from '@angular/core';
   styleUrl: './product-box-summary.component.css'
 })
 export class ProductBoxSummaryComponent {
+
+  @Input() product!:ProductSummary;
+
+  getProductImage(){
+    return `${this.product.name}.jpg`
+  }
 
 }

@@ -1,1 +1,11 @@
-<p>transaction-list works!</p>
+<div class="transaction-list" *ngIf="transactions$ | async as transactions">
+    <div *ngFor="let transaction of transactions">
+      <app-transaction-box-summary 
+        [transaction]="transaction">
+      </app-transaction-box-summary>
+    </div>
+    
+    <p class="no-transactions" *ngIf="transactions.length === 0">
+      No {{type === 'pending' ? 'pending' : 'completed'}} transactions
+    </p>
+  </div>

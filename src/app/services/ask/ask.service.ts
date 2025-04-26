@@ -8,6 +8,7 @@ import { Ask } from '../../models/ask.model';
 import { AskDetails } from '../../models/full_ask.model';
 import { TransactionSuccess } from '../../models/transaction_completed.model';
 import { PostSummary } from '../../models/post_summary.model';
+import { UpdatePost } from '../../models/update_post.model';
 
 @Injectable({
   providedIn: 'root'
@@ -45,6 +46,11 @@ export class AskService {
 
   findAll():Observable<PostSummary[]>{
     return this.httpClient.get<PostSummary[]>(`${this.baseUrl}/get-all/?userId=${this.userId}`);
+  }
+
+  updateAsk(post:UpdatePost): Observable<AskDetails | TransactionSuccess>{
+    post.userId=this.userId || '';
+    return this.httpClient.put<AskDetails | TransactionSuccess>(`${this.baseUrl}/update`,post);
   }
 
 }

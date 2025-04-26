@@ -5,11 +5,12 @@ import { LoginRequestData } from '../../../models/login.model';
 import { UserRegistration } from '../../../models/register.model';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
+import { LoadingScreenComponent } from '../../lowkey_components/loading-screen/loading-screen.component';
 
 @Component({
   selector: 'app-authentication',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoadingScreenComponent],
   templateUrl: './authentication.component.html',
   styleUrl: './authentication.component.css'
 })
@@ -25,6 +26,8 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
   passwordInput!: string;
   errorMessage: string='';
   errorsExist: boolean=false;
+  loadingBehaviour:BehaviorSubject<boolean>=new BehaviorSubject<boolean>(true);
+  loading$=this.loadingBehaviour.asObservable();
   private destroyStream$:Subject<void>=new Subject<void>();
 
   constructor(authenticationService: AuthenticationService, router:Router,activatedRoute:ActivatedRoute){
@@ -39,6 +42,7 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
     const param=this.activatedRoute.snapshot.paramMap.get('authentication');
     if(param!=null && param==='create-account')
       this.isLoginMode=false;
+    this.loadingBehaviour.next(false);
   }
 
   switchMode(): void{
@@ -67,6 +71,7 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
   }
 
   private login(): void{
+    this.loadingBehaviour.next(true);
     this.loginCredentials.setEmail(this.emailInput);
     this.loginCredentials.setPassword(this.passwordInput);
     this.manageObservable(this.authenticationService.login(this.loginCredentials));
@@ -78,6 +83,7 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
       this.errorMessage='Empty fields are not allowed.'
     }
     else{
+      this.loadingBehaviour.next(true);
       this.registrationCredentials.setEmail(this.emailInput);
       this.registrationCredentials.setPassword(this.passwordInput);
       this.manageObservable(this.authenticationService.createNewAccount(this.registrationCredentials));
@@ -92,9 +98,11 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
     )
     .subscribe({
       next: (data)=>{
+        this.loadingBehaviour.next(false);
         this.router.navigate(['/account/profile']);
       },
       error: (error) =>{
+        this.loadingBehaviour.next(false);
         this.errorsExist=true;
         this.errorMessage=error.message;
       }

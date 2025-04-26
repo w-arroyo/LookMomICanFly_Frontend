@@ -1,4 +1,4 @@
-<div class="product-list-container"  *ngIf="productList$ | async as products">
+<div class="product-list-container"  *ngIf="productList$ | async as products; else loading">
   <ng-container *ngIf="productList$ | async as products">
     <div class="filter-button-container" *ngIf="products.length > 0">
       <button class="filter-toggle" (click)="activateFilterComponent()">
