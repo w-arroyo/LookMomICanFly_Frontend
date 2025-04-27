@@ -1,4 +1,3 @@
-.post-list,
 .transaction-list {
   display: flex;
   flex-direction: column;
@@ -19,7 +18,6 @@
   }
 }
 
-.no-posts,
 .no-transactions {
   text-align: center;
   color: #755540;

@@ -5,6 +5,8 @@ import { ProfileAddressesComponent } from "../components/lowkey_components/profi
 import { ProfileBankAccountComponent } from "../components/lowkey_components/profile-bank-account/profile-bank-account.component"
 import { ProfilePhoneNumberComponent } from "../components/lowkey_components/profile-phone-number/profile-phone-number.component"
 import { ProfileUpdateDataComponent } from "../components/lowkey_components/profile-update-data/profile-update-data.component"
+import { ProfileTransactionsComponent } from "../components/lowkey_components/profile-transactions/profile-transactions.component"
+import { ProfileLikedProductsListComponent } from "../components/lowkey_components/profile-liked-products-list/profile-liked-products-list.component"
 
 export const routes:Routes=[
     {
@@ -31,5 +33,14 @@ export const routes:Routes=[
     {
         path:'update',
         component:ProfileUpdateDataComponent
+    },
+    {
+        path:'liking',
+        component:ProfileLikedProductsListComponent
+    },
+    {
+        path:':section',
+        component: ProfileTransactionsComponent
     }
+    
 ]

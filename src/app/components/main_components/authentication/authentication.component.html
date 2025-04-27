@@ -53,3 +53,6 @@
       </form>
     </div>
   </div>
+
+  <app-loading-screen *ngIf="(loading$ | async)">
+  </app-loading-screen>

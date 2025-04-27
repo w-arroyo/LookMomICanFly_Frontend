@@ -8,6 +8,7 @@ import { BidDetails } from '../../models/full_bid.model';
 import { TransactionSuccess } from '../../models/transaction_completed.model';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { PostSummary } from '../../models/post_summary.model';
+import { UpdatePost } from '../../models/update_post.model';
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +48,11 @@ export class BidService {
 
   findAll():Observable<PostSummary[]>{
     return this.httpClient.get<PostSummary[]>(`${this.baseUrl}get-all/?userId=${this.userId}`);
+  }
+
+  updateBid(post:UpdatePost):Observable<BidDetails | TransactionSuccess>{
+    post.userId=this.userId;
+    return this.httpClient.post<BidDetails | TransactionSuccess>(`${this.baseUrl}update`, post);
   }
 
 }

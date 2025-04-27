@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, RouterOutlet, RouterLinkWithHref } from '@angular/router';
+import { Component } from '@angular/core';
+import { Router, RouterOutlet, RouterLinkWithHref, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
 
 @Component({
@@ -12,12 +12,12 @@ import { AuthenticationService } from '../../../services/authentication/authenti
 export class ProfileComponent{
 
   private router:Router;
-  private auhenticationService:AuthenticationService;
+  private authenticationService:AuthenticationService;
   selectedSection: string = 'profile';
 
-  constructor(router:Router,auhenticationService:AuthenticationService) {
+  constructor(router:Router,authenticationService:AuthenticationService) {
     this.router=router;
-    this.auhenticationService=auhenticationService;
+    this.authenticationService=authenticationService;
   }
 
   selectSection(section:string):void {
@@ -29,7 +29,7 @@ export class ProfileComponent{
   }
 
   logout():void{
-    this.auhenticationService.logout();
+    this.authenticationService.logout();
     this.router.navigate(['home']);
   }
 }

@@ -7,5 +7,6 @@ export class TransactionSummary{
     size!:string;
     status!:string;
     amount!:number;
+    date!:string;
 
 }
