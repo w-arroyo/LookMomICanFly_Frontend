@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, map, catchError, throwError } from 'rxjs';
 import { ProductSummary } from '../../models/product_summary.model';
 import { publicEndpoint } from '../../config/request.interceptor';
+import { FilterSelectedOptions } from '../../models/filter_options.model';
 
 @Injectable({
   providedIn: 'root'
@@ -65,6 +66,12 @@ export class ProductSummaryService {
 
   emptyProductList(){
     this.productListBehaviorSubject.next([]);
+  }
+
+  getFilteredProducts(filter:FilterSelectedOptions){
+    this.handleBackendResponse(
+      this.httpClient.post<ProductSummary[]>(`${this.baseUrl}/get/filter`,filter)
+    );
   }
 
 }

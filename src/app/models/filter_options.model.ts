@@ -12,4 +12,8 @@ export class FilterSelectedOptions{
         this.manufacturers=[];
     }
 
+    checkIfEmpty(){
+        return this.subcategories.length==0 && this.years.length==0 && this.colors.length==0 && this.manufacturers.length==0;
+    }
+
 }

@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-sale-details',
-  imports: [CommonModule],
+  imports: [CommonModule,RouterLinkWithHref],
   templateUrl: './sale-details.component.html',
   styleUrl: './sale-details.component.css'
 })

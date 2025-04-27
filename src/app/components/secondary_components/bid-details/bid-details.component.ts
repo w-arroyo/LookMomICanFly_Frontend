@@ -3,11 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
 import { BidDetails } from '../../../models/full_bid.model';
 import { BidService } from '../../../services/bid/bid.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 
 @Component({
   selector: 'app-bid-details',
-  imports: [CommonModule],
+  imports: [CommonModule,RouterLinkWithHref],
   templateUrl: './bid-details.component.html',
   styleUrl: './bid-details.component.css'
 })
