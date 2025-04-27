@@ -32,6 +32,11 @@
             (click)="selectSection('selling')">SELLING</button>
 
     <button class="menu-item" 
+            [class.active]="isActive('liking')" 
+            [routerLink]="['liking']"
+            (click)="selectSection('liking')">LIKING</button>
+
+    <button class="menu-item" 
             [class.active]="isActive('update')" 
             [routerLink]="['update']"
             (click)="selectSection('update')">UPDATE PROFILE</button>

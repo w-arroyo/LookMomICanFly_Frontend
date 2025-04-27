@@ -39,6 +39,10 @@ export class ProductDetailsService {
     return this.httpClient.get<SuccessfulBooleanRequest>(`${this.baseUrl}/favorites/check/?userId=${this.userId}&productId=${productId}`)
   }
 
+  getLikedProducts():Observable<ProductSummary[]>{
+    return this.httpClient.get<ProductSummary[]>(`${this.baseUrl}/favorites/list/?userId=${this.userId}`);
+  }
+
   likeAProduct(productId:string): Observable<SuccessfullRequest>{
     return this.httpClient.post<SuccessfullRequest>(`${this.baseUrl}/favorites/like/?userId=${this.userId}&productId=${productId}`,null)
   }
