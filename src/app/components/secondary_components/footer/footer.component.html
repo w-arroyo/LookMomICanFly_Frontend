@@ -3,8 +3,8 @@
       <div class="footer-left">
         <span class="conversation-text">Stay up to date: </span>
         <div class="email-box">
-            <input type="email" placeholder="EMAIL" class="email-input">
-            <button class="email-button">➔</button>
+            <input type="email" placeholder="EMAIL" class="email-input" [(ngModel)]="email">
+            <button class="email-button" (click)="send()">➔</button>
           </div>
       </div>
       
