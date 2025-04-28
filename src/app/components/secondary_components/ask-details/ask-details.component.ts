@@ -7,7 +7,7 @@ import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 
 @Component({
   selector: 'app-ask-details',
-  imports: [CommonModule],
+  imports: [CommonModule,RouterLinkWithHref],
   templateUrl: './ask-details.component.html',
   styleUrl: './ask-details.component.css'
 })

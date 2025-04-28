@@ -7,6 +7,9 @@ import { AskDetailsComponent } from './components/secondary_components/ask-detai
 import { SaleDetailsComponent } from './components/secondary_components/sale-details/sale-details.component';
 import { PaymentScreenComponent } from './components/secondary_components/payment-screen/payment-screen.component';
 import { OrderDetailsComponent } from './components/secondary_components/order-details/order-details.component';
+import { ContactSectionComponent } from './components/lowkey_components/contact-section/contact-section.component';
+import { AboutUsSectionComponent } from './components/lowkey_components/about-us-section/about-us-section.component';
+import { SocialSectionComponent } from './components/lowkey_components/social-section/social-section.component';
 
 export const routes: Routes = [
     {
@@ -54,6 +57,18 @@ export const routes: Routes = [
         path:'payment',
         component:PaymentScreenComponent,
         canActivate:[AuthGuardService]
+    },
+    {
+        path:'contact',
+        component:ContactSectionComponent
+    },
+    {
+        path:'about-us',
+        component:AboutUsSectionComponent
+    },
+    {
+        path:'social',
+        component:SocialSectionComponent
     },
     {
         path:'**', redirectTo:'home'

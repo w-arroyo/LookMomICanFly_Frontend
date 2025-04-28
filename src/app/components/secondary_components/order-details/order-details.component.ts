@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Order } from '../../../models/order.model';
 import { catchError, Observable, throwError } from 'rxjs';
 import { OrderService } from '../../../services/order/order.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-order-details',
-  imports: [CommonModule],
+  imports: [CommonModule,RouterLinkWithHref],
   templateUrl: './order-details.component.html',
   styleUrl: './order-details.component.css'
 })

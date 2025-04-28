@@ -4,10 +4,11 @@ import { FilterProductsService } from '../../../services/filter_products/filter-
 import { ProductSummaryService } from '../../../services/product_summary/product-summary.service';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { FilterSelectedOptions } from '../../../models/filter_options.model';
+import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-filter-products',
-  imports: [CommonModule],
+  imports: [CommonModule,ReactiveFormsModule],
   templateUrl: './filter-products.component.html',
   styleUrl: './filter-products.component.css'
 })
@@ -16,6 +17,8 @@ export class FilterProductsComponent implements OnInit, OnDestroy{
   private filterProductsService:FilterProductsService;
   private productSummaryService: ProductSummaryService;
   private filterSelectedOptions:FilterSelectedOptions;
+  private formBuilder:FormBuilder;
+  filterForm:FormGroup;
   isOpen:boolean=false;
   yearList:number[]=[];
   colors:string[]=[];
@@ -24,10 +27,17 @@ export class FilterProductsComponent implements OnInit, OnDestroy{
   category!:string|null;
   private destroyStream:Subject<void>=new Subject<void>();
 
-  constructor(filterProductsService:FilterProductsService, productSummaryService: ProductSummaryService){
+  constructor(filterProductsService:FilterProductsService, productSummaryService: ProductSummaryService,formBuilder:FormBuilder){
     this.filterProductsService=filterProductsService;
     this.productSummaryService=productSummaryService;
+    this.formBuilder=formBuilder;
     this.filterSelectedOptions=new FilterSelectedOptions();
+    this.filterForm=this.formBuilder.group({
+      subcategories:this.formBuilder.array([]),
+      years:this.formBuilder.array([]),
+      colors:this.formBuilder.array([]),
+      manufacturers:this.formBuilder.array([])
+    });
   }
 
   ngOnInit(): void {
@@ -38,6 +48,22 @@ export class FilterProductsComponent implements OnInit, OnDestroy{
     this.subscribeToSubcategories();
   }
 
+  private createCheckboxesControls(items:any[],formArray:FormArray){
+    while(formArray.length>0)
+      formArray.removeAt(0);
+    items.forEach(
+      (item)=>{
+        formArray.push(
+          new FormControl(false)
+        );
+      }
+    );
+  }
+
+  private getFormArray(section:string){
+    return this.filterForm.get(section) as FormArray;
+  }
+
   private subscribeToVisibility(){
     this.filterProductsService.isVisible$.pipe(
       takeUntil(
@@ -45,7 +71,9 @@ export class FilterProductsComponent implements OnInit, OnDestroy{
       )
     )
     .subscribe({
-      next: (data)=> this.isOpen=data,
+      next: (data)=> {
+        this.isOpen=data
+      },
       error: (error)=>{
         console.log(error);
         this.isOpen=false;
@@ -59,7 +87,10 @@ export class FilterProductsComponent implements OnInit, OnDestroy{
         this.destroyStream
       )
     ).subscribe({
-      next: (data)=> this.yearList=data,
+      next: (data)=> {
+        this.yearList=data;
+        this.createCheckboxesControls(data,this.getFormArray('years'));
+      },
       error: (error) => {
         console.log(error);
         this.yearList=[]
@@ -73,7 +104,10 @@ export class FilterProductsComponent implements OnInit, OnDestroy{
         this.destroyStream
       )
     ).subscribe({
-      next: (data)=> this.colors=data,
+      next: (data)=> {
+        this.colors=data;
+        this.createCheckboxesControls(data,this.getFormArray('colors'));
+      },
       error: (error) => {
         console.log(error);
         this.colors=[]
@@ -87,7 +121,10 @@ export class FilterProductsComponent implements OnInit, OnDestroy{
         this.destroyStream
       )
     ).subscribe({
-      next: (data)=> this.manufacturers=data,
+      next: (data)=> {
+        this.manufacturers=data;
+        this.createCheckboxesControls(data,this.getFormArray('manufacturers'));
+      },
       error: (error) => {
         console.log(error);
         this.manufacturers=[]
@@ -109,7 +146,10 @@ export class FilterProductsComponent implements OnInit, OnDestroy{
               this.destroyStream
             )
           ).subscribe({
-            next: (data)=> this.subcategories=data,
+            next: (data)=> {
+              this.subcategories=data;
+              this.createCheckboxesControls(data,this.getFormArray('subcategories'));
+            },
             error: (error) => {
               console.log(error);
               this.subcategories=[]
@@ -124,8 +164,31 @@ export class FilterProductsComponent implements OnInit, OnDestroy{
     });
   }
 
+  private getSelectedValues(list:any[], formArray:FormArray): any[]{
+    return list.filter((unused,position)=>{ // item,index
+      return formArray.at(position).value // only values with the form control as TRUE
+    });
+  }
+
+  private getSelectedCheckboxes(){
+    this.filterSelectedOptions.years=this.getSelectedValues(
+      this.yearList,this.getFormArray('years')
+    );
+    this.filterSelectedOptions.colors=this.getSelectedValues(
+      this.colors,this.getFormArray('colors')
+    );
+    this.filterSelectedOptions.subcategories=this.getSelectedValues(
+      this.subcategories,this.getFormArray('subcategories')
+    );
+    this.filterSelectedOptions.manufacturers=this.getSelectedValues(
+      this.manufacturers,this.getFormArray('manufacturers')
+    );
+  }
+
   applyFilters() {
-    this.clearSelection();
+    this.getSelectedCheckboxes();
+    if(!this.filterSelectedOptions.checkIfEmpty())
+      this.productSummaryService.getFilteredProducts(this.filterSelectedOptions);
     this.filterProductsService.isVisibleSubject.next(false);
   }
 
@@ -134,12 +197,19 @@ export class FilterProductsComponent implements OnInit, OnDestroy{
     this.filterProductsService.isVisibleSubject.next(false);
   }
 
-  private getSelectedCheckboxes(){
-    
-  }
-
-  private clearSelection(){
-    // get checkboxes and uncheck them
+  clearSelection(){
+    this.getFormArray('years').controls.forEach((item)=>{
+      item.setValue(false)
+    });
+    this.getFormArray('manufacturers').controls.forEach((item)=>{
+      item.setValue(false)
+    });
+    this.getFormArray('subcategories').controls.forEach((item)=>{
+      item.setValue(false)
+    });
+    this.getFormArray('colors').controls.forEach((item)=>{
+      item.setValue(false)
+    });
     this.filterSelectedOptions.clearOptions();
   }
 
