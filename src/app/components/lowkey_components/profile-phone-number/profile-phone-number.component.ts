@@ -37,6 +37,9 @@ export class ProfilePhoneNumberComponent implements OnInit, OnDestroy{
 
   private getPrefixes(){
     this.phonePrefixes$=this.profileDataService.getPhonePrefixes().pipe(
+      takeUntil(
+      this.destroyStream$
+    ),
       catchError(
               (error)=>{
                 this.errorMessage=error.error?.error;
@@ -48,6 +51,9 @@ export class ProfilePhoneNumberComponent implements OnInit, OnDestroy{
 
   private getPhoneNumber(){
     this.phoneNumber$=this.profileDataService.getPhoneNumber().pipe(
+      takeUntil(
+      this.destroyStream$
+    ),
       catchError(
               (error)=>{
                 this.errorMessage=error.error?.error;

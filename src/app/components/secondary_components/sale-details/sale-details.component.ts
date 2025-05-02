@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, Observable, Subject, takeUntil, throwError } from 'rxjs';
 import { SaleService } from '../../../services/sale/sale.service';
 import { Sale } from '../../../models/sale.model';
 import { CommonModule } from '@angular/common';
@@ -11,13 +11,14 @@ import { CommonModule } from '@angular/common';
   templateUrl: './sale-details.component.html',
   styleUrl: './sale-details.component.css'
 })
-export class SaleDetailsComponent implements OnInit{
+export class SaleDetailsComponent implements OnInit,OnDestroy{
 
   saleId: string = '';
   sale$!: Observable<Sale>;
 
   private saleService: SaleService;
   private router: Router;
+  private destroyStream:Subject<void>=new Subject<void>();
   private activatedRoute: ActivatedRoute
 
   constructor(saleService: SaleService, router: Router, activatedRoute: ActivatedRoute){
@@ -38,6 +39,9 @@ export class SaleDetailsComponent implements OnInit{
 
   private getSale() {
     this.sale$ = this.saleService.findSale(this.saleId).pipe(
+      takeUntil(
+        this.destroyStream
+      ),
       catchError((error) => {
         console.log(error);
         this.router.navigate(['home']);
@@ -53,6 +57,11 @@ export class SaleDetailsComponent implements OnInit{
   calculateTotalPayout(amount: number, feePercentage: number, shippingFee: number): number {
     const feeAmount = amount * (feePercentage / 100);
     return amount - feeAmount - shippingFee;
+  }
+
+  ngOnDestroy(): void {
+    this.destroyStream.next();
+    this.destroyStream.complete();
   }
   
 }

@@ -83,6 +83,9 @@ export class PaymentScreenComponent implements OnInit, OnDestroy, AfterViewInit{
 
   private handleObservable(observable:Observable<any>):Observable<any>{
     return observable.pipe(
+      takeUntil(
+        this.destroyStream
+      ),
       catchError(
         (error)=>{
           console.log(error);
@@ -174,6 +177,7 @@ export class PaymentScreenComponent implements OnInit, OnDestroy, AfterViewInit{
         if(message.includes("declined"))
           this.errorMessage='Your card was declined. Try again with another one.';
         else this.errorMessage=message;
+        this.loading=false;
       }
     });
   

@@ -24,6 +24,9 @@ export class PostListComponent implements OnInit,OnDestroy{
 
   posts$!:Observable<PostSummary[]>;
   private destroyStream:Subject<void>=new Subject<void>();
+  
+  statusMessage: string = '';
+  messageType: string = 'success';
 
   sectionParam:string='';
   private router:Router;
@@ -77,10 +80,13 @@ export class PostListComponent implements OnInit,OnDestroy{
 
   private handleObservable(observable:Observable<any>){
     return observable.pipe(
+      takeUntil(
+        this.destroyStream
+      ),
           catchError(
             (error)=>{
               console.log(error);
-              this.router.navigate(['home']);
+              //this.router.navigate(['home']);
               return throwError(()=> new Error(error.error?.error));
             }
           )
@@ -106,6 +112,7 @@ export class PostListComponent implements OnInit,OnDestroy{
     ).subscribe({
       next: (data)=>{
         this.loadingBehaviour.next(false);
+        this.statusMessage='';
         if('status' in data){
           this.router.navigate([route+'/'+(data as TransactionSuccess).id]);
         }
@@ -113,6 +120,9 @@ export class PostListComponent implements OnInit,OnDestroy{
       },
       error: (error)=>{
         console.log(error);
+        this.loadingBehaviour.next(false);
+        this.statusMessage=error;
+        this.messageType='error';
         this.loadingBehaviour.next(false);
       }
     });

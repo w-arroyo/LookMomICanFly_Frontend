@@ -73,6 +73,9 @@ export class CompletedTransactionListComponent implements OnInit,OnDestroy{
 
   private handleObservable(observable:Observable<TransactionSummary[]>){
     return observable.pipe(
+      takeUntil(
+        this.destroyStream
+      ),
           catchError(
             (error)=>{
               console.log(error);

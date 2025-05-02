@@ -21,6 +21,7 @@
   flex-direction: column;
   gap: 8px;
   min-width: 100px;
+  cursor: pointer;
 }
 
 .detail-label {

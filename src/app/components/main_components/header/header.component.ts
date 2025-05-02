@@ -79,7 +79,7 @@ export class HeaderComponent implements OnInit{
 
   logout(): void{
     this.authenticationService.logout();
-    this.router.navigate(['/home']);
+    //this.router.navigate(['/home']);
   }
 
   redirectHome(): void{

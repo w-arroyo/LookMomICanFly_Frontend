@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Order } from '../../../models/order.model';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, Observable, Subject, takeUntil, throwError } from 'rxjs';
 import { OrderService } from '../../../services/order/order.service';
 import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -11,13 +11,14 @@ import { CommonModule } from '@angular/common';
   templateUrl: './order-details.component.html',
   styleUrl: './order-details.component.css'
 })
-export class OrderDetailsComponent implements OnInit{
+export class OrderDetailsComponent implements OnInit,OnDestroy{
 
   orderId:string='';
   order$!:Observable<Order>;
 
   private orderService:OrderService;
   private router:Router;
+  private destroyStream:Subject<void>=new Subject<void>();
   private activatedRoute:ActivatedRoute;
 
   constructor(orderService:OrderService,router:Router,activatedRoute:ActivatedRoute) {
@@ -38,6 +39,9 @@ export class OrderDetailsComponent implements OnInit{
 
   private getOrder() {
     this.order$ = this.orderService.findOrder(this.orderId).pipe(
+      takeUntil(
+        this.destroyStream
+      ),
       catchError(
         (error) => {
         console.log(error);
@@ -53,5 +57,10 @@ export class OrderDetailsComponent implements OnInit{
 
   calculateTotalCost(amount:number,feePercentage:number,shippingCost: number):number {
     return amount+feePercentage+shippingCost;
+  }
+
+  ngOnDestroy(): void {
+    this.destroyStream.next();
+    this.destroyStream.complete();
   }
 }

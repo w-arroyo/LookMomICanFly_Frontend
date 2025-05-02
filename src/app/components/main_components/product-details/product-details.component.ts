@@ -59,7 +59,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy{
         const productId=params.get('productId');
         if(category && productId){
           this.productId=productId;
-          this.product$=this.productDetailsService.loadProductPage(productId,category).pipe(
+          this.product$=this.productDetailsService.loadProductPage(productId,category.toLowerCase()).pipe(
             catchError(
               (error)=>{
                 console.log(error.error?.error);

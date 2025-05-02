@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { catchError, Observable, throwError } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { catchError, Observable, Subject, takeUntil, throwError } from 'rxjs';
 import { AskDetails } from '../../../models/full_ask.model';
 import { AskService } from '../../../services/ask/ask.service';
 import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
@@ -11,13 +11,14 @@ import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
   templateUrl: './ask-details.component.html',
   styleUrl: './ask-details.component.css'
 })
-export class AskDetailsComponent implements OnInit{
+export class AskDetailsComponent implements OnInit,OnDestroy{
 
   askId:string='';
   ask$!:Observable<AskDetails>;
   private askService:AskService;
   private router:Router;
   private activatedRoute:ActivatedRoute;
+  private destroyStream:Subject<void>=new Subject<void>();
 
   constructor(askService:AskService,router:Router,activatedRoute:ActivatedRoute){
     this.askService=askService;
@@ -37,6 +38,9 @@ export class AskDetailsComponent implements OnInit{
 
   private getAsk(){
     this.ask$=this.askService.findAsk(this.askId).pipe(
+          takeUntil(
+          this.destroyStream
+        ),
        catchError(
                 (error)=>{
                   console.log(error);
@@ -54,6 +58,11 @@ export class AskDetailsComponent implements OnInit{
   calculateTotalPayout(amount: number, feePercentage: number, shippingFee: number): number {
     const feeAmount = amount * (feePercentage / 100);
     return amount - feeAmount - shippingFee;
+  }
+
+  ngOnDestroy(): void {
+    this.destroyStream.next();
+    this.destroyStream.complete();
   }
 
 }

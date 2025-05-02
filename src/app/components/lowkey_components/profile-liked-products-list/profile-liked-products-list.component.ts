@@ -4,6 +4,7 @@ import { catchError, Observable, Subject, takeUntil, throwError } from 'rxjs';
 import { ProductSummary } from '../../../models/product_summary.model';
 import { CommonModule } from '@angular/common';
 import { LoadingScreenComponent } from '../loading-screen/loading-screen.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile-liked-products-list',
@@ -14,21 +15,30 @@ import { LoadingScreenComponent } from '../loading-screen/loading-screen.compone
 export class ProfileLikedProductsListComponent implements OnInit,OnDestroy{
 
   private productService:ProductDetailsService;
+  private router:Router;
   products$!:Observable<ProductSummary[]>;
   private destroyStream:Subject<void>=new Subject<void>();
 
   error:string | null=null;
 
-  constructor(productService:ProductDetailsService){
+  constructor(productService:ProductDetailsService,router:Router){
     this.productService=productService;
+    this.router=router;
   }
 
   ngOnInit(): void {
     this.getLikedProducts();
   }
 
+  goToProduct(id:string,category:string){
+    this.router.navigate([`/products/${category.toLowerCase()}/details/${id}`]);
+  }
+
   private handleObservable(observable:Observable<any>){
     return observable.pipe(
+      takeUntil(
+      this.destroyStream
+    ),
       catchError(
         (error)=>{
           console.log(error);

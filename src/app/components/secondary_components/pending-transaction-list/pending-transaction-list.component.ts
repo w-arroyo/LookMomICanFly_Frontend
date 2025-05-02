@@ -81,6 +81,9 @@ export class PendingTransactionListComponent {
 
   private handleObservable(observable:Observable<any>){
     return observable.pipe(
+      takeUntil(
+        this.destroyStream
+      ),
           catchError(
             (error)=>{
               console.log(error);

@@ -68,6 +68,7 @@ export class AuthenticationService{
     localStorage.removeItem('jwt_token');
     this.tokenBehaviourSubject.next(null);
     this.isLoggedSubject.next(false);
+    window.location.href = '/home';
   }
 
   checkIfAuthenticated(): boolean{

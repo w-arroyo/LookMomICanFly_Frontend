@@ -5,10 +5,11 @@ import { ProfileDataService } from '../../../services/profile/profile-data.servi
 import { catchError, Observable, Subject, takeUntil, tap, throwError } from 'rxjs';
 import { UserProfileData } from '../../../models/user_profile.model';
 import { Router } from '@angular/router';
+import { LoadingScreenComponent } from '../loading-screen/loading-screen.component';
 
 @Component({
   selector: 'app-profile-update-data',
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule,FormsModule,LoadingScreenComponent],
   templateUrl: './profile-update-data.component.html',
   styleUrl: './profile-update-data.component.css'
 })
@@ -19,6 +20,7 @@ export class ProfileUpdateDataComponent implements OnInit,OnDestroy{
   private destroyStream:Subject<void>=new Subject<void>();
   private router:Router;
   isEditingEmail = false;
+  loading:boolean=true;
   
   editedEmail = '';
   
@@ -34,10 +36,14 @@ export class ProfileUpdateDataComponent implements OnInit,OnDestroy{
 
   ngOnInit(): void {
     this.getUserData();
+    this.loading=false;
   }
 
   getUserData(){
     this.userData$=this.profileDataService.getProfileData().pipe(
+      takeUntil(
+      this.destroyStream
+    ),
       catchError(
         (error)=>{
           const message=error.error?.error;
@@ -69,6 +75,7 @@ export class ProfileUpdateDataComponent implements OnInit,OnDestroy{
       this.errorMessage = 'Please enter a valid email address';
       return;
     }
+    this.loading=true;
     this.profileDataService.updateEmail(this.editedEmail).pipe(
       takeUntil(
         this.destroyStream
@@ -79,11 +86,13 @@ export class ProfileUpdateDataComponent implements OnInit,OnDestroy{
           this.isEditingEmail=false;
           this.errorMessage=data.message;
           this.getUserData();
+          this.loading=false;
         },
         error: (error)=>{
           const message=error.error?.error;
           console.log(message);
           this.errorMessage=message;
+          this.loading=false;
         }
       })
     )
@@ -99,6 +108,7 @@ export class ProfileUpdateDataComponent implements OnInit,OnDestroy{
       this.errorMessage = 'Password must be at least 6 characters long.';
       return;
     }
+    this.loading=true;
     this.profileDataService.updatePassword(this.currentPassword,this.newPassword).pipe(
       takeUntil(
         this.destroyStream
@@ -108,12 +118,13 @@ export class ProfileUpdateDataComponent implements OnInit,OnDestroy{
           this.currentPassword='';
           this.newPassword='';
           this.errorMessage=data.message;
-          console.log(data)
+          this.loading=false;
         },
         error: (error)=>{
           const message=error.error?.error;
           console.log(message);
           this.errorMessage=message;
+          this.loading=false;
         }
       })
     )
@@ -121,6 +132,7 @@ export class ProfileUpdateDataComponent implements OnInit,OnDestroy{
   }
 
   deleteAccount(){
+    this.loading=true;
     this.profileDataService.deactivateAccount().pipe(
       takeUntil(
         this.destroyStream
@@ -128,11 +140,13 @@ export class ProfileUpdateDataComponent implements OnInit,OnDestroy{
     )
     .subscribe({
       next: (data)=>{
+        this.loading=false;
         this.router.navigate(['home']);
       },
       error: (error)=>{
         console.log(error);
         this.errorMessage=error.error?.error;
+        this.loading=false;
       }
     })
   }

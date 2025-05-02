@@ -105,6 +105,9 @@ export class CreateAskComponent implements OnInit, OnDestroy{
 
     private handleObservable(observable:Observable<any>):Observable<any>{
       return observable.pipe(
+        takeUntil(
+        this.destroyStream
+      ),
         catchError(
           (error)=>{
             console.log(error);
@@ -218,13 +221,18 @@ export class CreateAskComponent implements OnInit, OnDestroy{
           ask.bankAccountId=data?.id ? data.id : '';
           const address=this.askForm.get('address')?.value;
           const amount=this.askForm.get('price')?.value;
-          if(this.productId && address && amount && this.size){
+          if(this.productId && address && amount && this.size && ask.bankAccountId.trim()!==''){
             ask.addressId=address;
             ask.productId=this.productId;
             ask.amount=amount;
             ask.size=this.size;
+            this.postAsk(ask);
           }
-          this.postAsk(ask);
+          else {
+            this.errorMessage='All fields are mandatory.';
+            this.buttonMessage='Place Ask';
+            throwError(()=> new Error('All fields are mandatory.'));
+          }
         },
         error: (error)=> {
           this.errorMessage=error.error?.error
@@ -253,6 +261,7 @@ export class CreateAskComponent implements OnInit, OnDestroy{
         },
         error: (error)=>{
           this.errorMessage=error.error?.error;
+          this.buttonMessage='Place Ask';
         }
       });
     }

@@ -31,6 +31,9 @@ export class ProfileAddressesComponent implements OnInit, OnDestroy{
 
   private getAddresses(){
     this.addresses$=this.addressService.getUserAddresses().pipe(
+      takeUntil(
+        this.destroyStream
+      ),
       catchError(
         (error)=>{
           console.log(error.error?.error);

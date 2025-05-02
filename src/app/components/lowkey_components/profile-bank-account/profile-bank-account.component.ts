@@ -30,6 +30,9 @@ export class ProfileBankAccountComponent implements OnInit, OnDestroy{
 
   private loadBankAccount(){
     this.bankAccount$=this.profileDataService.getBankAccount().pipe(
+      takeUntil(
+      this.destroyStream
+    ),
       catchError(
         (error)=>{
           this.errorMessage=error.error?.error;

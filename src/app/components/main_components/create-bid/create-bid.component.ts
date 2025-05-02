@@ -109,6 +109,9 @@ export class CreateBidComponent implements OnInit, OnDestroy{
 
   private handleObservable(observable:Observable<any>):Observable<any>{
     return observable.pipe(
+      takeUntil(
+      this.destroyStream
+    ),
       catchError(
         (error)=>{
           console.log(error);
