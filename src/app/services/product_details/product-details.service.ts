@@ -22,7 +22,7 @@ export class ProductDetailsService {
   constructor(httpClient:HttpClient,authenticationService:AuthenticationService) {
     this.httpClient=httpClient;
     this.authenticationService=authenticationService;
-    const id=authenticationService.getUserId();
+    const id=this.authenticationService.getUserId();
     if(id)
       this.userId=id;
   }
