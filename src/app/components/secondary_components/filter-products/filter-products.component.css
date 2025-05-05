@@ -1,3 +1,8 @@
+.filter-scroll-container {
+  position: relative;
+  min-height: 100%;
+}
+
 .filter-overlay {
   position: fixed;
   top: 0;

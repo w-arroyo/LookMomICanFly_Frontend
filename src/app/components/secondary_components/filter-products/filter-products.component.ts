@@ -197,6 +197,13 @@ export class FilterProductsComponent implements OnInit, OnDestroy{
     this.filterProductsService.isVisibleSubject.next(false);
   }
 
+  preventScrollJump() {
+    // this just to fix random ass movements inside the list when you scroll
+    setTimeout(() => {
+      // makes sure angular processed all changes
+    }, 0);
+  }
+
   clearSelection(){
     this.getFormArray('years').controls.forEach((item)=>{
       item.setValue(false)
