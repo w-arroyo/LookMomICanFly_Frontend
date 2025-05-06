@@ -76,20 +76,22 @@ export class ProductDetailsComponent implements OnInit, OnDestroy{
   }
 
   private checkIfLiked(){
-    this.productDetailsService.checkIfUserLikesAProduct(this.productId).pipe(
-      takeUntil(
-        this.destroyStream
+    if(this.productDetailsService.checkIfUserIsLogged()){
+      this.productDetailsService.checkIfUserLikesAProduct(this.productId).pipe(
+        takeUntil(
+          this.destroyStream
+        )
       )
-    )
-    .subscribe({
-      next: (data)=>{
-        this.isLikedBehaviourSubject.next(data.status);
-      },
-      error:(error)=>{
-        console.log(error.error?.error);
-        this.isLikedBehaviourSubject.next(false);
-      }
-    });
+      .subscribe({
+        next: (data)=>{
+          this.isLikedBehaviourSubject.next(data.status);
+        },
+        error:(error)=>{
+          console.log(error.error?.error);
+          this.isLikedBehaviourSubject.next(false);
+        }
+      });
+    }
   }
 
   private handleLikingRequest(observable:Observable<SuccessfullRequest>,boolean:boolean){
@@ -117,7 +119,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy{
   }
 
   toggleLike(): void {
-    if(this.productDetailsService.userId){
+    if(this.productDetailsService.checkIfUserIsLogged()){
       if(this.isLikedBehaviourSubject.value)
         this.handleLikingRequest(
           this.productDetailsService.unlikeAProduct(this.productId),false

@@ -27,6 +27,15 @@ export class ProductDetailsService {
       this.userId=id;
   }
 
+  checkIfUserIsLogged(){
+    const id=this.authenticationService.getUserId();
+    if(id){
+      this.userId=id;
+      return true;
+    }
+    return false;
+  }
+
   loadProductPage(id:string,category:string): Observable<Product>{
     return this.httpClient.get<Sneakers>(`${this.baseUrl}/${category}/get/?id=${id}`, {context: publicEndpoint()})
   }
