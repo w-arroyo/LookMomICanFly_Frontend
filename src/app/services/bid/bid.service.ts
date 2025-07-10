@@ -16,7 +16,7 @@ import { UpdatePost } from '../../models/update_post.model';
 export class BidService {
 
   private httpClient: HttpClient;
-  private baseUrl:string='http://localhost:8080/api/bids/';
+  private baseUrl:string='/api/bids/';
   private authenticationService:AuthenticationService;
   userId:string='';
 

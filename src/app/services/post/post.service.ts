@@ -10,7 +10,7 @@ import { publicEndpoint } from '../../config/request.interceptor';
 export class PostService {
 
   private httpClient: HttpClient;
-  private baseUrl:string='http://localhost:8080/api';
+  private baseUrl:string='/api';
   productPostDetailsSubject:BehaviorSubject<Observable<SuccessfullRequest>[]>=new BehaviorSubject<Observable<SuccessfullRequest>[]>([]);
   selectedSizeSubject:BehaviorSubject<string | null>=new BehaviorSubject<string | null>(null);
   selectedSize$:Observable<string | null>=this.selectedSizeSubject.asObservable();

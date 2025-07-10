@@ -21,11 +21,11 @@ export class SellingFeeService {
   }
 
   getCurrentSellingFee(){
-    return this.httpClient.get<SellingFee>(`http://localhost:8080/api/fees/default/?userId=${this.userId}`);
+    return this.httpClient.get<SellingFee>(`/api/fees/default/?userId=${this.userId}`);
   }
 
   getShippingFee(){
-    return this.httpClient.get<SuccessfullRequest>(`http://localhost:8080/api/fees/shipping`, {context:publicEndpoint()});
+    return this.httpClient.get<SuccessfullRequest>(`/api/fees/shipping`, {context:publicEndpoint()});
   }
 
 }

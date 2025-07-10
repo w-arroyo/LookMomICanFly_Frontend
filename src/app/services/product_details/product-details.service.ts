@@ -14,7 +14,7 @@ import { SuccessfullRequest } from '../../models/successful_request.model';
 })
 export class ProductDetailsService {
 
-  private baseUrl: string='http://localhost:8080/api/products';
+  private baseUrl: string='/api/products';
   private authenticationService:AuthenticationService;
   private httpClient:HttpClient;
   userId:string='';

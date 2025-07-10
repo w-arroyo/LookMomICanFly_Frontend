@@ -11,7 +11,7 @@ import { TransactionSummary } from '../../models/transaction_summary.model';
 export class OrderService {
 
   private httpClient:HttpClient;
-  private baseUrl:string='http://localhost:8080/api/orders';
+  private baseUrl:string='/api/orders';
   private authenticationService:AuthenticationService;
   private userId:string='';
 

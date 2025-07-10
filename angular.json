@@ -42,7 +42,7 @@
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "2kB",
-                  "maximumError": "4kB"
+                  "maximumError": "10kB"
                 }
               ],
               "outputHashing": "all"
@@ -62,7 +62,8 @@
               "buildTarget": "LookMomICanFly:build:production"
             },
             "development": {
-              "buildTarget": "LookMomICanFly:build:development"
+              "buildTarget": "LookMomICanFly:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

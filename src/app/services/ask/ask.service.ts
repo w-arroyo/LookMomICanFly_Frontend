@@ -15,7 +15,7 @@ import { UpdatePost } from '../../models/update_post.model';
 })
 export class AskService {
 
-  private baseUrl: string ='http://localhost:8080/api/asks';
+  private baseUrl: string ='/api/asks';
   private httpClient: HttpClient;
   private authenticationService:AuthenticationService;
   private userId:string | null;

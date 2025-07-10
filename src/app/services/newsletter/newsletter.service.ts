@@ -16,6 +16,6 @@ export class NewsletterService {
   }
 
   send(email:string):Observable<SuccessfullRequest>{
-    return this.httpClient.post<SuccessfullRequest>(`http://localhost:8080/api/newsletter/?email=${email}`,null, {context: publicEndpoint()});
+    return this.httpClient.post<SuccessfullRequest>(`/api/newsletter/?email=${email}`,null, {context: publicEndpoint()});
   }
 }

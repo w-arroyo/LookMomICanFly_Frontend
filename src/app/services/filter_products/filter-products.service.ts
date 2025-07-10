@@ -8,7 +8,7 @@ import { publicEndpoint } from '../../config/request.interceptor';
 })
 export class FilterProductsService {
 
-  private baseUrl: string='http://localhost:8080/api/products';
+  private baseUrl: string='/api/products';
   isVisibleSubject:BehaviorSubject<boolean>=new BehaviorSubject<boolean>(false);
   isVisible$:Observable<boolean>= this.isVisibleSubject.asObservable();
   private httpClient:HttpClient;

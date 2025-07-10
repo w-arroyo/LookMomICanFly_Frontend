@@ -12,7 +12,7 @@ import { SuccessfullRequest } from '../../models/successful_request.model';
 export class SaleService {
 
   private httpClient:HttpClient;
-  private baseUrl:string='http://localhost:8080/api/sales';
+  private baseUrl:string='/api/sales';
   private authenticationService:AuthenticationService;
   private userId:string='';
 

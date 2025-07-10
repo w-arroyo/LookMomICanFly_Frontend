@@ -11,7 +11,7 @@ import { SuccessfullRequest } from '../../models/successful_request.model';
 export class ShippingOptionService {
 
   private httpClient:HttpClient;
-  private baseUrl='http://localhost:8080/api/shipping-options';
+  private baseUrl='/api/shipping-options';
 
   constructor(httpClient:HttpClient) {
     this.httpClient=httpClient;

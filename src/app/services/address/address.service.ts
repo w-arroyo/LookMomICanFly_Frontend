@@ -11,7 +11,7 @@ import { SuccessfullRequest } from '../../models/successful_request.model';
 export class AddressService {
   
   private httpClient:HttpClient;
-  private baseUrl:string='http://localhost:8080/api';
+  private baseUrl:string='/api';
     private authService:AuthenticationService;
     private userId:string | null;
 

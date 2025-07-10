@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { TransactionBoxSummaryComponent } from '../../lowkey_components/transaction-box-summary/transaction-box-summary.component';
-import { ProductSummaryService } from '../../../services/product_summary/product-summary.service';
 import { TransactionService } from '../../../services/transaction/transaction.service';
 import { SaleService } from '../../../services/sale/sale.service';
 import { OrderService } from '../../../services/order/order.service';

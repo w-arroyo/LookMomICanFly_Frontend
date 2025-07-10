@@ -13,7 +13,7 @@ import { jwtDecode } from 'jwt-decode';
 export class AuthenticationService{
 
   private httpClient: HttpClient;
-  private URL: string= 'http://localhost:8080/api/users';
+  private URL: string= '/api/users';
   private tokenBehaviourSubject= new BehaviorSubject<string | null>(null);
   isLoggedSubject=new BehaviorSubject<boolean>(false);
 

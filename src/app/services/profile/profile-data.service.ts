@@ -19,7 +19,7 @@ export class ProfileDataService {
 
   private httpClient:HttpClient;
   private router:Router;
-  private baseUrl:string='http://localhost:8080/api';
+  private baseUrl:string='/api';
   private authService:AuthenticationService;
   private userId:string | null;
 

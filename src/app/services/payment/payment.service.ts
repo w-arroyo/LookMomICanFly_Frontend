@@ -10,7 +10,7 @@ import { Bid } from '../../models/bid.model';
 export class PaymentService {
 
   private httpClient:HttpClient;
-  private url:string='http://localhost:8080/api/payments/create';
+  private url:string='/api/payments/create';
   bid!:Bid;
   totalAmount!:number;
 
